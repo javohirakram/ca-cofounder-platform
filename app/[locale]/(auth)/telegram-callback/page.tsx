@@ -15,33 +15,40 @@ export default function TelegramCallbackPage() {
   const processed = useRef(false);
 
   useEffect(() => {
-    // Prevent double-processing in React strict mode
     if (processed.current) return;
     processed.current = true;
 
     async function processAuth() {
-      // Read auth data from URL query parameters (sent by Telegram's data-auth-url redirect)
-      const urlParams = new URLSearchParams(window.location.search);
-      const id = urlParams.get('id');
-      const hash = urlParams.get('hash');
-      const auth_date = urlParams.get('auth_date');
+      let authData: Record<string, string> = {};
 
-      if (!id || !hash || !auth_date) {
-        setError('Missing authentication data from Telegram.');
-        return;
+      // Method 1: Check URL query parameters (from data-auth-url widget redirect)
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('id') && urlParams.get('hash')) {
+        urlParams.forEach((value, key) => {
+          authData[key] = value;
+        });
       }
 
-      // Build the auth payload
-      const authData: Record<string, string> = { id, hash, auth_date };
-      const first_name = urlParams.get('first_name');
-      const last_name = urlParams.get('last_name');
-      const username = urlParams.get('username');
-      const photo_url = urlParams.get('photo_url');
+      // Method 2: Check hash fragment (from direct oauth.telegram.org redirect)
+      // Format: #tgAuthResult=BASE64_JSON
+      if (!authData.id) {
+        const hash = window.location.hash;
+        if (hash.startsWith('#tgAuthResult=')) {
+          try {
+            const base64 = hash.slice('#tgAuthResult='.length);
+            authData = JSON.parse(atob(base64));
+          } catch {
+            setError('Failed to decode Telegram authentication data.');
+            return;
+          }
+        }
+      }
 
-      if (first_name) authData.first_name = first_name;
-      if (last_name) authData.last_name = last_name;
-      if (username) authData.username = username;
-      if (photo_url) authData.photo_url = photo_url;
+      // Validate we have required fields
+      if (!authData.id || !authData.hash || !authData.auth_date) {
+        setError('Missing authentication data from Telegram. Please try again.');
+        return;
+      }
 
       try {
         // Send to our API for verification and user creation
@@ -68,7 +75,7 @@ export default function TelegramCallbackPage() {
 
           if (verifyError) {
             console.error('OTP verification error:', verifyError);
-            setError('Failed to create session. Please try logging in again.');
+            setError('Failed to create session. Please try again.');
             return;
           }
         }
