@@ -386,25 +386,28 @@ export default async function ProfilePage({
                   Roles
                 </h3>
                 <div className="flex flex-wrap gap-1.5">
-                  {typedProfile.role.map((role) => (
-                    <span
-                      key={role}
-                      className={cn(
-                        'inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-medium',
-                        roleColors[role] ??
-                          'bg-secondary text-secondary-foreground'
-                      )}
-                    >
-                      {tRoles(
-                        role as
-                          | 'technical'
-                          | 'business'
-                          | 'design'
-                          | 'product'
-                          | 'operations'
-                      )}
-                    </span>
-                  ))}
+                  {typedProfile.role.map((role) => {
+                    const roleKey = role.toLowerCase();
+                    return (
+                      <span
+                        key={role}
+                        className={cn(
+                          'inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-medium',
+                          roleColors[roleKey] ??
+                            'bg-secondary text-secondary-foreground'
+                        )}
+                      >
+                        {tRoles(
+                          roleKey as
+                            | 'technical'
+                            | 'business'
+                            | 'design'
+                            | 'product'
+                            | 'operations'
+                        )}
+                      </span>
+                    );
+                  })}
                 </div>
               </section>
             )}
@@ -524,25 +527,28 @@ export default async function ProfilePage({
               </h3>
               {typedProfile.looking_for_roles.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 mb-2">
-                  {typedProfile.looking_for_roles.map((role) => (
-                    <span
-                      key={role}
-                      className={cn(
-                        'inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium',
-                        roleColors[role] ??
-                          'bg-secondary text-secondary-foreground'
-                      )}
-                    >
-                      {tRoles(
-                        role as
-                          | 'technical'
-                          | 'business'
-                          | 'design'
-                          | 'product'
-                          | 'operations'
-                      )}
-                    </span>
-                  ))}
+                  {typedProfile.looking_for_roles.map((role) => {
+                    const roleKey = role.toLowerCase();
+                    return (
+                      <span
+                        key={role}
+                        className={cn(
+                          'inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium',
+                          roleColors[roleKey] ??
+                            'bg-secondary text-secondary-foreground'
+                        )}
+                      >
+                        {tRoles(
+                          roleKey as
+                            | 'technical'
+                            | 'business'
+                            | 'design'
+                            | 'product'
+                            | 'operations'
+                        )}
+                      </span>
+                    );
+                  })}
                 </div>
               )}
               {typedProfile.looking_for_description && (

@@ -90,7 +90,7 @@ interface OnboardingData {
 
 const COUNTRIES = ['Kazakhstan', 'Kyrgyzstan', 'Uzbekistan', 'Tajikistan', 'Turkmenistan'];
 
-const ROLES = ['Technical', 'Business', 'Design', 'Product', 'Operations'];
+const ROLES = ['technical', 'business', 'design', 'product', 'operations'];
 
 const IDEA_STAGES = [
   { value: 'no_idea', icon: Lightbulb, description: 'Exploring options, open to any idea' },
@@ -154,6 +154,7 @@ export default function OnboardingPage() {
   const params = useParams();
   const locale = params.locale as string;
   const t = useTranslations('onboarding');
+  const tRoles = useTranslations('roles');
   const tStages = useTranslations('stages');
 
   const [step, setStep] = useState(1);
@@ -507,7 +508,7 @@ export default function OnboardingPage() {
                     )}
                     disabled={isLoading}
                   >
-                    {role}
+                    {tRoles(role as 'technical' | 'business' | 'design' | 'product' | 'operations')}
                   </button>
                 ))}
               </div>
@@ -807,7 +808,7 @@ export default function OnboardingPage() {
                     )}
                     disabled={isLoading}
                   >
-                    {role}
+                    {tRoles(role as 'technical' | 'business' | 'design' | 'product' | 'operations')}
                   </button>
                 ))}
               </div>

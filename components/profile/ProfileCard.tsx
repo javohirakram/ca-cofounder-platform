@@ -89,17 +89,20 @@ export function ProfileCard({ profile, onConnect }: ProfileCardProps) {
         {/* Roles */}
         {profile.role.length > 0 && (
           <div className="flex flex-wrap gap-1.5">
-            {profile.role.map((role) => (
-              <span
-                key={role}
-                className={cn(
-                  'inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-medium',
-                  roleColors[role] ?? 'bg-secondary text-secondary-foreground'
-                )}
-              >
-                {tRoles(role as 'technical' | 'business' | 'design' | 'product' | 'operations')}
-              </span>
-            ))}
+            {profile.role.map((role) => {
+              const roleKey = role.toLowerCase();
+              return (
+                <span
+                  key={role}
+                  className={cn(
+                    'inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-medium',
+                    roleColors[roleKey] ?? 'bg-secondary text-secondary-foreground'
+                  )}
+                >
+                  {tRoles(roleKey as 'technical' | 'business' | 'design' | 'product' | 'operations')}
+                </span>
+              );
+            })}
           </div>
         )}
 

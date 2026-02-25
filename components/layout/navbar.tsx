@@ -19,6 +19,7 @@ import {
 
 } from '@/components/ui/dropdown-menu';
 import { Bell, Globe, LogOut, Moon, Settings, Sun, User } from 'lucide-react';
+import { Logo } from '@/components/ui/logo';
 import type { Profile } from '@/types/database';
 
 const localeLabels: Record<string, string> = {
@@ -82,10 +83,8 @@ export function Navbar() {
       {/* Left side - page title or breadcrumb area */}
       <div className="flex items-center gap-2">
         {/* On mobile, show logo */}
-        <Link href={`/${locale}/discover`} className="md:hidden flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary text-primary-foreground text-xs font-bold">
-            CF
-          </div>
+        <Link href={`/${locale}/discover`} className="md:hidden">
+          <Logo size="sm" showText={false} />
         </Link>
       </div>
 

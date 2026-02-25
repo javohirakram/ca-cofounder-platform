@@ -13,6 +13,7 @@ import {
   Settings,
   User,
 } from 'lucide-react';
+import { Logo } from '@/components/ui/logo';
 import {
   Tooltip,
   TooltipContent,
@@ -55,13 +56,9 @@ export function Sidebar() {
       <aside className="hidden md:flex md:w-[68px] lg:w-[240px] flex-col border-r border-border bg-card h-screen sticky top-0">
         {/* Logo */}
         <div className="flex h-14 items-center border-b border-border px-4">
-          <Link href={`/${locale}/discover`} className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-bold">
-              CF
-            </div>
-            <span className="hidden lg:block text-sm font-semibold tracking-tight">
-              CoFound CA
-            </span>
+          <Link href={`/${locale}/discover`}>
+            <Logo size="md" showText={false} className="lg:hidden" />
+            <Logo size="md" showText={true} className="hidden lg:flex" />
           </Link>
         </div>
 

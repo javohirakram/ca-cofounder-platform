@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { Logo } from '@/components/ui/logo';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -56,12 +57,9 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
       {/* Centered content container */}
       <div className="relative z-10 w-full max-w-md px-4">
         {/* Logo / Brand */}
-        <div className="mb-8 text-center">
+        <div className="mb-8 flex justify-center">
           <Link href={`/${locale}`} className="inline-block">
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">
-              CoFound
-              <span className="text-primary/70"> Central Asia</span>
-            </h1>
+            <Logo size="lg" showText={true} />
           </Link>
         </div>
 
