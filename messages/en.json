@@ -5,7 +5,6 @@
     "matches": "Matches",
     "ideas": "Ideas",
     "messages": "Messages",
-    "accelerators": "Accelerators",
     "notifications": "Notifications",
     "settings": "Settings",
     "profile": "Profile",
@@ -225,17 +224,6 @@
     "copyTelegram": "Copy Telegram Handle",
     "readReceipt": "Read"
   },
-  "accelerators": {
-    "title": "Accelerators",
-    "joinAccelerator": "Join Accelerator",
-    "website": "Website",
-    "cohort": "Cohort",
-    "members": "Members",
-    "founders": "Founders",
-    "alumni": "Alumni",
-    "mentors": "Mentors",
-    "claimAccelerator": "Claim This Accelerator"
-  },
   "notifications": {
     "title": "Notifications",
     "markAllRead": "Mark All as Read",
@@ -297,7 +285,6 @@
     "messagesSent": "Messages Sent",
     "users": "Users",
     "ideas": "Ideas",
-    "accelerators": "Accelerators",
     "reports": "Reports",
     "search": "Search users...",
     "actions": "Actions",
@@ -306,9 +293,7 @@
     "toggleActive": "Toggle Active",
     "deleteUser": "Delete User",
     "deleteIdea": "Delete Idea",
-    "toggleOpen": "Toggle Open",
-    "createAccelerator": "Create Accelerator",
-    "editAccelerator": "Edit Accelerator"
+    "toggleOpen": "Toggle Open"
   },
   "roles": {
     "technical": "Technical",

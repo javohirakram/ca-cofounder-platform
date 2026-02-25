@@ -9,7 +9,6 @@ import {
   Users,
   Lightbulb,
   MessageSquare,
-  Rocket,
   Bell,
   Settings,
   User,
@@ -32,7 +31,6 @@ const mainNavItems: SidebarItem[] = [
   { labelKey: 'matches', href: '/matches', icon: Users },
   { labelKey: 'ideas', href: '/ideas', icon: Lightbulb },
   { labelKey: 'messages', href: '/messages', icon: MessageSquare },
-  { labelKey: 'accelerators', href: '/accelerators', icon: Rocket },
 ];
 
 const bottomNavItems: SidebarItem[] = [

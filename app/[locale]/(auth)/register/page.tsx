@@ -13,7 +13,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Loader2, Send } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import TelegramLoginButton from '@/components/telegram-login-button';
 
 const registerSchema = z
   .object({
@@ -238,20 +239,8 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      {/* Telegram Register Button */}
-      <Button
-        type="button"
-        variant="outline"
-        className="w-full border-[#54A9EB]/30 bg-[#54A9EB]/5 text-[#54A9EB] hover:bg-[#54A9EB]/10 hover:text-[#54A9EB]"
-        size="lg"
-        disabled={isLoading}
-        onClick={() => {
-          toast.info('Telegram registration coming soon!');
-        }}
-      >
-        <Send className="h-4 w-4" />
-        <span>Sign up with Telegram</span>
-      </Button>
+      {/* Telegram Register */}
+      <TelegramLoginButton label="Sign up with Telegram" />
 
       {/* Login Link */}
       <p className="text-center text-sm text-muted-foreground">

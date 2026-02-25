@@ -8,7 +8,6 @@ import {
   Link2,
   MessageSquare,
   ArrowRight,
-  Rocket,
   FileBarChart,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -86,12 +85,6 @@ export default async function AdminDashboardPage({
       href: `/${locale}/admin/ideas`,
       icon: <Lightbulb className="h-4 w-4" />,
       description: 'Review and manage startup ideas',
-    },
-    {
-      label: t('accelerators'),
-      href: `/${locale}/admin/accelerators`,
-      icon: <Rocket className="h-4 w-4" />,
-      description: 'Manage accelerator programs',
     },
     {
       label: t('reports'),

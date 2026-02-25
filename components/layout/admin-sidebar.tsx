@@ -8,7 +8,6 @@ import {
   LayoutDashboard,
   Users,
   Lightbulb,
-  Rocket,
   FileBarChart,
   ArrowLeft,
 } from 'lucide-react';
@@ -29,7 +28,6 @@ const adminNavItems: SidebarItem[] = [
   { labelKey: 'title', href: '/admin', icon: LayoutDashboard },
   { labelKey: 'users', href: '/admin/users', icon: Users },
   { labelKey: 'ideas', href: '/admin/ideas', icon: Lightbulb },
-  { labelKey: 'accelerators', href: '/admin/accelerators', icon: Rocket },
   { labelKey: 'reports', href: '/admin/reports', icon: FileBarChart },
 ];
 

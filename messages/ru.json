@@ -5,7 +5,6 @@
     "matches": "Совпадения",
     "ideas": "Идеи",
     "messages": "Сообщения",
-    "accelerators": "Акселераторы",
     "notifications": "Уведомления",
     "settings": "Настройки",
     "profile": "Профиль",
@@ -225,17 +224,6 @@
     "copyTelegram": "Скопировать Telegram",
     "readReceipt": "Прочитано"
   },
-  "accelerators": {
-    "title": "Акселераторы",
-    "joinAccelerator": "Присоединиться к акселератору",
-    "website": "Веб-сайт",
-    "cohort": "Когорта",
-    "members": "Участники",
-    "founders": "Основатели",
-    "alumni": "Выпускники",
-    "mentors": "Менторы",
-    "claimAccelerator": "Заявить права на акселератор"
-  },
   "notifications": {
     "title": "Уведомления",
     "markAllRead": "Отметить все как прочитанные",
@@ -297,7 +285,6 @@
     "messagesSent": "Отправлено сообщений",
     "users": "Пользователи",
     "ideas": "Идеи",
-    "accelerators": "Акселераторы",
     "reports": "Отчёты",
     "search": "Поиск пользователей...",
     "actions": "Действия",
@@ -306,9 +293,7 @@
     "toggleActive": "Переключить активность",
     "deleteUser": "Удалить пользователя",
     "deleteIdea": "Удалить идею",
-    "toggleOpen": "Переключить открытость",
-    "createAccelerator": "Создать акселератор",
-    "editAccelerator": "Редактировать акселератор"
+    "toggleOpen": "Переключить открытость"
   },
   "roles": {
     "technical": "Технический",

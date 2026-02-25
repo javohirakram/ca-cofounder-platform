@@ -5,7 +5,6 @@
     "matches": "Moslik",
     "ideas": "G'oyalar",
     "messages": "Xabarlar",
-    "accelerators": "Akseleratorlar",
     "notifications": "Bildirishnomalar",
     "settings": "Sozlamalar",
     "profile": "Profil",
@@ -225,17 +224,6 @@
     "copyTelegram": "Telegramni nusxalash",
     "readReceipt": "O'qildi"
   },
-  "accelerators": {
-    "title": "Akseleratorlar",
-    "joinAccelerator": "Akseleratorga qo'shilish",
-    "website": "Veb-sayt",
-    "cohort": "Kogorta",
-    "members": "A'zolar",
-    "founders": "Asoschilar",
-    "alumni": "Bitiruvchilar",
-    "mentors": "Mentorlar",
-    "claimAccelerator": "Akseleratorni da'vo qilish"
-  },
   "notifications": {
     "title": "Bildirishnomalar",
     "markAllRead": "Hammasini o'qilgan deb belgilash",
@@ -297,7 +285,6 @@
     "messagesSent": "Yuborilgan xabarlar",
     "users": "Foydalanuvchilar",
     "ideas": "G'oyalar",
-    "accelerators": "Akseleratorlar",
     "reports": "Hisobotlar",
     "search": "Foydalanuvchilarni qidiring...",
     "actions": "Amallar",
@@ -306,9 +293,7 @@
     "toggleActive": "Faollikni o'zgartirish",
     "deleteUser": "Foydalanuvchini o'chirish",
     "deleteIdea": "G'oyani o'chirish",
-    "toggleOpen": "Ochiqlikni o'zgartirish",
-    "createAccelerator": "Akselerator yaratish",
-    "editAccelerator": "Akseleratorni tahrirlash"
+    "toggleOpen": "Ochiqlikni o'zgartirish"
   },
   "roles": {
     "technical": "Texnik",

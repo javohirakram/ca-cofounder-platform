@@ -8,7 +8,7 @@ const intlMiddleware = createMiddleware({
   localePrefix: 'always'
 });
 
-const protectedRoutes = ['/discover', '/matches', '/ideas', '/messages', '/profile', '/accelerators', '/notifications', '/settings', '/admin'];
+const protectedRoutes = ['/discover', '/matches', '/ideas', '/messages', '/profile', '/notifications', '/settings', '/admin'];
 
 export default async function middleware(request: NextRequest) {
   // Create response from intl middleware

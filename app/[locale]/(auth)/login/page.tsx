@@ -12,7 +12,8 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, Send } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import TelegramLoginButton from '@/components/telegram-login-button';
 
 const loginSchema = z.object({
   email: z.string().min(1, 'Email is required').email('Invalid email address'),
@@ -138,20 +139,8 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Telegram Login Button */}
-      <Button
-        type="button"
-        variant="outline"
-        className="w-full border-[#54A9EB]/30 bg-[#54A9EB]/5 text-[#54A9EB] hover:bg-[#54A9EB]/10 hover:text-[#54A9EB]"
-        size="lg"
-        disabled={isLoading}
-        onClick={() => {
-          toast.info('Telegram login coming soon!');
-        }}
-      >
-        <Send className="h-4 w-4" />
-        <span>{t('telegramLogin')}</span>
-      </Button>
+      {/* Telegram Login */}
+      <TelegramLoginButton label={t('telegramLogin')} />
 
       {/* Register Link */}
       <p className="text-center text-sm text-muted-foreground">
