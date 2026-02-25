@@ -13,7 +13,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Loader2 } from 'lucide-react';
-import TelegramLoginButton from '@/components/telegram-login-button';
 
 const loginSchema = z.object({
   email: z.string().min(1, 'Email is required').email('Invalid email address'),
@@ -126,21 +125,6 @@ export default function LoginPage() {
           )}
         </Button>
       </form>
-
-      {/* Divider */}
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-2 text-muted-foreground">
-            {t('orContinueWith')}
-          </span>
-        </div>
-      </div>
-
-      {/* Telegram Login */}
-      <TelegramLoginButton label={t('telegramLogin')} />
 
       {/* Register Link */}
       <p className="text-center text-sm text-muted-foreground">
