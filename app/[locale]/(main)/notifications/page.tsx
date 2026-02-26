@@ -144,7 +144,7 @@ export default function NotificationsPage() {
           description={t('noNotificationsDesc')}
         />
       ) : (
-        <div className="rounded-xl border bg-card divide-y divide-border">
+        <div className="rounded-xl border border-border/60 bg-card shadow-sm divide-y divide-border/60">
           {notifications.map((notification) => (
             <NotificationItem
               key={notification.id}

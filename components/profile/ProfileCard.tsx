@@ -13,6 +13,7 @@ import type { Profile } from '@/types/database';
 
 interface ProfileCardProps {
   profile: Profile;
+  isOwnProfile?: boolean;
   onConnect?: (profile: Profile) => void;
 }
 
@@ -30,7 +31,7 @@ function isOnline(lastActive: string): boolean {
   return new Date(lastActive) > sevenDaysAgo;
 }
 
-export function ProfileCard({ profile, onConnect }: ProfileCardProps) {
+export function ProfileCard({ profile, isOwnProfile = false, onConnect }: ProfileCardProps) {
   const params = useParams();
   const locale = params.locale as string;
   const t = useTranslations('discover');
@@ -42,12 +43,12 @@ export function ProfileCard({ profile, onConnect }: ProfileCardProps) {
   const displayIndustries = profile.industries.slice(0, 3);
 
   return (
-    <Card className="rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden">
+    <Card className="group rounded-xl border border-border/50 bg-card shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-200 overflow-hidden">
       <CardContent className="p-5 space-y-3.5">
         {/* Header: Avatar + Name */}
         <div className="flex items-center gap-3">
           <div className="relative">
-            <Avatar className="h-12 w-12">
+            <Avatar className="h-12 w-12 ring-2 ring-border/40 group-hover:ring-primary/20 transition-all duration-200">
               <AvatarImage
                 src={profile.avatar_url ?? undefined}
                 alt={profile.full_name ?? ''}
@@ -63,6 +64,9 @@ export function ProfileCard({ profile, onConnect }: ProfileCardProps) {
           <div className="min-w-0 flex-1">
             <h3 className="text-sm font-semibold text-foreground truncate">
               {profile.full_name}
+              {isOwnProfile && (
+                <span className="ml-1.5 text-[10px] font-normal text-muted-foreground">(You)</span>
+              )}
             </h3>
             {profile.headline && (
               <p className="text-xs text-muted-foreground truncate mt-0.5">
@@ -175,14 +179,16 @@ export function ProfileCard({ profile, onConnect }: ProfileCardProps) {
               {t('viewProfile')}
             </Link>
           </Button>
-          <Button
-            size="sm"
-            className="flex-1 h-8 text-xs"
-            onClick={() => onConnect?.(profile)}
-          >
-            <UserPlus className="h-3.5 w-3.5 mr-1" />
-            {t('connect')}
-          </Button>
+          {!isOwnProfile && (
+            <Button
+              size="sm"
+              className="flex-1 h-8 text-xs"
+              onClick={() => onConnect?.(profile)}
+            >
+              <UserPlus className="h-3.5 w-3.5 mr-1" />
+              {t('connect')}
+            </Button>
+          )}
         </div>
       </CardContent>
     </Card>

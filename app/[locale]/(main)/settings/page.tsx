@@ -377,7 +377,7 @@ export default function SettingsPage() {
                 <Input
                   id="currentPassword"
                   type="password"
-                  placeholder="••••••••"
+                  autoComplete="current-password"
                   disabled={passwordSaving}
                   {...register('currentPassword')}
                 />
@@ -392,7 +392,7 @@ export default function SettingsPage() {
                 <Input
                   id="newPassword"
                   type="password"
-                  placeholder="••••••••"
+                  autoComplete="new-password"
                   disabled={passwordSaving}
                   {...register('newPassword')}
                 />
@@ -407,7 +407,7 @@ export default function SettingsPage() {
                 <Input
                   id="confirmNewPassword"
                   type="password"
-                  placeholder="••••••••"
+                  autoComplete="new-password"
                   disabled={passwordSaving}
                   {...register('confirmNewPassword')}
                 />

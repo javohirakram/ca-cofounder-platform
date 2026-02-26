@@ -305,7 +305,33 @@ export default function OnboardingPage() {
     }
   }
 
+  const [stepErrors, setStepErrors] = useState<Record<string, string>>({});
+
+  function validateStep(currentStep: number): boolean {
+    const errors: Record<string, string> = {};
+
+    if (currentStep === 1) {
+      if (!data.fullName || data.fullName.length < 2) {
+        errors.fullName = 'Name is required';
+      }
+      if (!data.country) {
+        errors.country = 'Country is required';
+      }
+      if (!data.city || data.city.trim().length === 0) {
+        errors.city = 'City is required';
+      }
+    }
+
+    setStepErrors(errors);
+    return Object.keys(errors).length === 0;
+  }
+
   async function handleNext() {
+    if (!validateStep(step)) {
+      toast.error('Please fill in all required fields.');
+      return;
+    }
+
     const saved = await saveStepData(step);
     if (!saved) return;
 
@@ -412,14 +438,21 @@ export default function OnboardingPage() {
           <div className="space-y-5">
             {/* Full Name */}
             <div className="space-y-2">
-              <Label htmlFor="fullName">{t('fullName')}</Label>
+              <Label htmlFor="fullName">{t('fullName')} *</Label>
               <Input
                 id="fullName"
                 value={data.fullName}
-                onChange={(e) => updateData('fullName', e.target.value)}
+                onChange={(e) => {
+                  updateData('fullName', e.target.value);
+                  if (stepErrors.fullName) setStepErrors((prev) => ({ ...prev, fullName: '' }));
+                }}
                 placeholder="John Doe"
                 disabled={isLoading}
+                className={cn(stepErrors.fullName && 'border-destructive')}
               />
+              {stepErrors.fullName && (
+                <p className="text-xs text-destructive">{stepErrors.fullName}</p>
+              )}
             </div>
 
             {/* Avatar Upload */}
@@ -434,13 +467,16 @@ export default function OnboardingPage() {
 
             {/* Country */}
             <div className="space-y-2">
-              <Label>{t('country')}</Label>
+              <Label>{t('country')} *</Label>
               <Select
                 value={data.country}
-                onValueChange={(value) => updateData('country', value)}
+                onValueChange={(value) => {
+                  updateData('country', value);
+                  if (stepErrors.country) setStepErrors((prev) => ({ ...prev, country: '' }));
+                }}
                 disabled={isLoading}
               >
-                <SelectTrigger>
+                <SelectTrigger className={cn(stepErrors.country && 'border-destructive')}>
                   <SelectValue placeholder={t('country')} />
                 </SelectTrigger>
                 <SelectContent>
@@ -451,18 +487,28 @@ export default function OnboardingPage() {
                   ))}
                 </SelectContent>
               </Select>
+              {stepErrors.country && (
+                <p className="text-xs text-destructive">{stepErrors.country}</p>
+              )}
             </div>
 
             {/* City */}
             <div className="space-y-2">
-              <Label htmlFor="city">{t('city')}</Label>
+              <Label htmlFor="city">{t('city')} *</Label>
               <Input
                 id="city"
                 value={data.city}
-                onChange={(e) => updateData('city', e.target.value)}
+                onChange={(e) => {
+                  updateData('city', e.target.value);
+                  if (stepErrors.city) setStepErrors((prev) => ({ ...prev, city: '' }));
+                }}
                 placeholder="Almaty"
                 disabled={isLoading}
+                className={cn(stepErrors.city && 'border-destructive')}
               />
+              {stepErrors.city && (
+                <p className="text-xs text-destructive">{stepErrors.city}</p>
+              )}
             </div>
 
             {/* Headline */}

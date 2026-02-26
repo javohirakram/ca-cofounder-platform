@@ -53,7 +53,7 @@ export function Sidebar() {
 
   return (
     <TooltipProvider delayDuration={0}>
-      <aside className="hidden md:flex md:w-[68px] lg:w-[240px] flex-col border-r border-border bg-card h-screen sticky top-0">
+      <aside className="hidden md:flex md:w-[68px] lg:w-[240px] flex-col border-r border-border bg-card/80 backdrop-blur-sm h-screen sticky top-0">
         {/* Logo */}
         <div className="flex h-14 items-center border-b border-border px-4">
           <Link href={`/${locale}/discover`}>
@@ -76,8 +76,8 @@ export function Sidebar() {
                     className={cn(
                       'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
                       active
-                        ? 'bg-primary/10 text-primary'
-                        : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                        ? 'bg-primary/10 text-primary font-semibold'
+                        : 'text-muted-foreground hover:bg-accent/80 hover:text-accent-foreground'
                     )}
                   >
                     <Icon className="h-5 w-5 shrink-0" />
@@ -106,8 +106,8 @@ export function Sidebar() {
                     className={cn(
                       'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
                       active
-                        ? 'bg-primary/10 text-primary'
-                        : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                        ? 'bg-primary/10 text-primary font-semibold'
+                        : 'text-muted-foreground hover:bg-accent/80 hover:text-accent-foreground'
                     )}
                   >
                     <Icon className="h-5 w-5 shrink-0" />

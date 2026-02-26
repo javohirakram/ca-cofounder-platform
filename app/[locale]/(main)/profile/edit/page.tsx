@@ -4,10 +4,8 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { createClient } from '@/lib/supabase';
-import { cn } from '@/lib/utils';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { ProfileForm } from '@/components/profile/ProfileForm';
-import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import type { Profile } from '@/types/database';
@@ -111,29 +109,6 @@ export default function ProfileEditPage() {
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <PageHeader title={t('editProfile')} />
-
-      {/* Completeness overview */}
-      <div className="rounded-xl border bg-card p-4">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-foreground">
-            {t('completeness')}
-          </span>
-          <span
-            className={cn(
-              'text-sm font-semibold',
-              profile.profile_completeness >= 80
-                ? 'text-emerald-600'
-                : profile.profile_completeness >= 50
-                  ? 'text-amber-600'
-                  : 'text-muted-foreground'
-            )}
-          >
-            {profile.profile_completeness}%
-          </span>
-        </div>
-        <Progress value={profile.profile_completeness} className="h-2" />
-      </div>
-
       <ProfileForm profile={profile} />
     </div>
   );

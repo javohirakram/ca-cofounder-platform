@@ -64,7 +64,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
         </div>
 
         {/* Auth card */}
-        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+        <div className="rounded-xl border border-border/60 bg-card p-6 shadow-lg shadow-black/[0.03] dark:shadow-black/20">
           {children}
         </div>
 

@@ -7,13 +7,15 @@ import { Input } from '@/components/ui/input';
 import { FilterSidebar, type DiscoverFilters } from '@/components/discover/FilterSidebar';
 import { FounderGrid } from '@/components/discover/FounderGrid';
 import { EmptyState } from '@/components/shared/EmptyState';
-import { Search, Users } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Search, Users, X } from 'lucide-react';
 import type { Profile } from '@/types/database';
 
 interface DiscoverContentProps {
   initialProfiles: Profile[];
   initialTotal: number;
   pageSize: number;
+  currentUserId?: string | null;
 }
 
 const defaultFilters: DiscoverFilters = {
@@ -31,6 +33,7 @@ export function DiscoverContent({
   initialProfiles,
   initialTotal,
   pageSize,
+  currentUserId,
 }: DiscoverContentProps) {
   const t = useTranslations('discover');
   const tCommon = useTranslations('common');
@@ -176,6 +179,63 @@ export function DiscoverContent({
 
   const hasMore = profiles.length < total;
 
+  // Build active filter chips
+  function getActiveChips(): { key: string; label: string; onRemove: () => void }[] {
+    const chips: { key: string; label: string; onRemove: () => void }[] = [];
+    for (const c of filters.countries) {
+      chips.push({
+        key: `country-${c}`,
+        label: c,
+        onRemove: () => handleFilterChange({ ...filters, countries: filters.countries.filter((v) => v !== c) }),
+      });
+    }
+    for (const r of filters.roles) {
+      chips.push({
+        key: `role-${r}`,
+        label: r,
+        onRemove: () => handleFilterChange({ ...filters, roles: filters.roles.filter((v) => v !== r) }),
+      });
+    }
+    for (const ind of filters.industries) {
+      chips.push({
+        key: `industry-${ind}`,
+        label: ind,
+        onRemove: () => handleFilterChange({ ...filters, industries: filters.industries.filter((v) => v !== ind) }),
+      });
+    }
+    if (filters.commitment && filters.commitment !== 'any') {
+      chips.push({
+        key: `commitment-${filters.commitment}`,
+        label: filters.commitment.replace('_', ' '),
+        onRemove: () => handleFilterChange({ ...filters, commitment: 'any' }),
+      });
+    }
+    for (const s of filters.idea_stages) {
+      chips.push({
+        key: `stage-${s}`,
+        label: s.replace(/_/g, ' '),
+        onRemove: () => handleFilterChange({ ...filters, idea_stages: filters.idea_stages.filter((v) => v !== s) }),
+      });
+    }
+    for (const l of filters.languages) {
+      chips.push({
+        key: `lang-${l}`,
+        label: l,
+        onRemove: () => handleFilterChange({ ...filters, languages: filters.languages.filter((v) => v !== l) }),
+      });
+    }
+    for (const tag of filters.ecosystem_tags) {
+      chips.push({
+        key: `eco-${tag}`,
+        label: tag,
+        onRemove: () => handleFilterChange({ ...filters, ecosystem_tags: filters.ecosystem_tags.filter((v) => v !== tag) }),
+      });
+    }
+    return chips;
+  }
+
+  const activeChips = getActiveChips();
+
   return (
     <div className="space-y-6">
       {/* Search bar */}
@@ -189,6 +249,30 @@ export function DiscoverContent({
           className="pl-10 h-10"
         />
       </div>
+
+      {/* Active filter chips */}
+      {activeChips.length > 0 && (
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="text-xs text-muted-foreground mr-1">{t('filterBy')}:</span>
+          {activeChips.map((chip) => (
+            <Badge
+              key={chip.key}
+              variant="secondary"
+              className="gap-1 pr-1 text-xs font-normal capitalize cursor-pointer hover:bg-destructive/10 hover:text-destructive transition-colors"
+              onClick={chip.onRemove}
+            >
+              {chip.label}
+              <X className="h-3 w-3" />
+            </Badge>
+          ))}
+          <button
+            onClick={() => handleFilterChange(defaultFilters)}
+            className="text-[11px] text-muted-foreground hover:text-foreground transition-colors ml-1 underline-offset-2 hover:underline"
+          >
+            Clear all
+          </button>
+        </div>
+      )}
 
       {/* Mobile filter button */}
       <div className="lg:hidden">
@@ -249,6 +333,7 @@ export function DiscoverContent({
               onLoadMore={handleLoadMore}
               hasMore={hasMore}
               loading={loadingMore}
+              currentUserId={currentUserId}
             />
           )}
         </div>

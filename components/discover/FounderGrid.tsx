@@ -14,9 +14,10 @@ interface FounderGridProps {
   onLoadMore: () => void;
   hasMore: boolean;
   loading?: boolean;
+  currentUserId?: string | null;
 }
 
-export function FounderGrid({ profiles, total, onLoadMore, hasMore, loading }: FounderGridProps) {
+export function FounderGrid({ profiles, total, onLoadMore, hasMore, loading, currentUserId }: FounderGridProps) {
   const t = useTranslations('discover');
   const [connectProfile, setConnectProfile] = useState<Profile | null>(null);
 
@@ -33,6 +34,7 @@ export function FounderGrid({ profiles, total, onLoadMore, hasMore, loading }: F
           <ProfileCard
             key={profile.id}
             profile={profile}
+            isOwnProfile={currentUserId === profile.id}
             onConnect={(p) => setConnectProfile(p)}
           />
         ))}

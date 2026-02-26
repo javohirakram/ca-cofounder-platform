@@ -10,6 +10,10 @@ export default async function DiscoverPage() {
   const t = await getTranslations('discover');
   const supabase = createServerSupabaseClient();
 
+  // Get current user
+  const { data: { session } } = await supabase.auth.getSession();
+  const currentUserId = session?.user?.id ?? null;
+
   // Fetch initial profiles where is_actively_looking = true
   const { data: profiles, count } = await supabase
     .from('profiles')
@@ -31,6 +35,7 @@ export default async function DiscoverPage() {
         initialProfiles={initialProfiles}
         initialTotal={totalCount}
         pageSize={PAGE_SIZE}
+        currentUserId={currentUserId}
       />
     </div>
   );

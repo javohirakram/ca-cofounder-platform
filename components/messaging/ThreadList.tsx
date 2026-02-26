@@ -53,7 +53,9 @@ export function ThreadList({
       <div className="flex flex-col items-center justify-center h-full py-12 px-4">
         <MessageSquare className="h-10 w-10 text-muted-foreground/30 mb-3" />
         <p className="text-sm font-medium text-foreground mb-1">{t('noMessages')}</p>
-        <p className="text-xs text-muted-foreground text-center">{t('startConversation')}</p>
+        <p className="text-xs text-muted-foreground text-center max-w-[200px]">
+          Messages unlock after you connect with someone. Go to Discover, send a connection request, and wait for them to accept.
+        </p>
       </div>
     );
   }

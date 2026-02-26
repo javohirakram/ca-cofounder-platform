@@ -18,6 +18,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Loader2, Send, UserPlus } from 'lucide-react';
+import { toast } from 'sonner';
 import type { Profile, ConnectionInsert, NotificationInsert } from '@/types/database';
 
 const connectSchema = z.object({
@@ -76,6 +77,12 @@ export function ConnectModal({ profile, open, onOpenChange }: ConnectModalProps)
 
       const requesterId = session.user.id;
 
+      // Prevent self-connect
+      if (requesterId === profile.id) {
+        setError('You cannot send a connection request to yourself.');
+        return;
+      }
+
       // Check for existing connection
       const { data: existing } = await supabase
         .from('connections')
@@ -125,6 +132,7 @@ export function ConnectModal({ profile, open, onOpenChange }: ConnectModalProps)
       await supabase.from('notifications').insert(notificationData as never);
 
       setSent(true);
+      toast.success('Connection request sent!');
 
       // Auto-close after brief success display
       setTimeout(() => {
@@ -133,6 +141,7 @@ export function ConnectModal({ profile, open, onOpenChange }: ConnectModalProps)
     } catch (err) {
       console.error('Connection request error:', err);
       setError('Failed to send connection request. Please try again.');
+      toast.error('Failed to send connection request.');
     } finally {
       setSending(false);
     }

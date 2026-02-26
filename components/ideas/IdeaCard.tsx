@@ -99,7 +99,7 @@ export function IdeaCard({
   const stageLabelKey = idea.stage as 'no_idea' | 'have_idea' | 'concept' | 'prototype' | 'side_project' | 'early_traction';
 
   return (
-    <Card className="rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden">
+    <Card className="group rounded-xl border border-border/50 bg-card shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-200 overflow-hidden">
       <CardContent className="p-5 flex flex-col gap-3">
         {/* Title + Stage badge */}
         <div className="flex items-start justify-between gap-2">

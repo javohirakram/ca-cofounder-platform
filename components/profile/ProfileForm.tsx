@@ -22,8 +22,28 @@ import {
 import { Switch } from '@/components/ui/switch';
 import { SkillsInput } from '@/components/profile/SkillsInput';
 import { AvatarUpload } from '@/components/profile/AvatarUpload';
-import { Loader2, Save, CheckCircle2 } from 'lucide-react';
-import type { Profile } from '@/types/database';
+import { Loader2, Save, CheckCircle2, Plus, X, Briefcase, GraduationCap } from 'lucide-react';
+import { toast } from 'sonner';
+import type { Profile, Json } from '@/types/database';
+
+interface WorkExperience {
+  company: string;
+  role: string;
+  duration: string;
+  current: boolean;
+}
+
+interface EducationEntry {
+  school: string;
+  degree: string;
+  field: string;
+  graduationYear: string;
+}
+
+function parseJsonArray<T>(json: Json): T[] {
+  if (Array.isArray(json)) return json as T[];
+  return [];
+}
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const profileSchema = z.object({
@@ -113,6 +133,12 @@ export function ProfileForm({ profile }: ProfileFormProps) {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(profile.avatar_url);
+  const [experience, setExperience] = useState<WorkExperience[]>(
+    parseJsonArray<WorkExperience>(profile.experience)
+  );
+  const [education, setEducation] = useState<EducationEntry[]>(
+    parseJsonArray<EducationEntry>(profile.education)
+  );
 
   const {
     register,
@@ -178,6 +204,8 @@ export function ProfileForm({ profile }: ProfileFormProps) {
         .update({
           ...data,
           avatar_url: avatarUrl,
+          experience: experience as unknown as Json,
+          education: education as unknown as Json,
           profile_completeness: profileCompleteness,
           updated_at: new Date().toISOString(),
         } as never)
@@ -185,8 +213,10 @@ export function ProfileForm({ profile }: ProfileFormProps) {
 
       if (error) throw error;
       setSaved(true);
+      toast.success('Profile saved successfully');
     } catch (err) {
       console.error('Profile save error:', err);
+      toast.error('Failed to save profile');
     } finally {
       setSaving(false);
     }
@@ -203,14 +233,21 @@ export function ProfileForm({ profile }: ProfileFormProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
       {/* Completeness */}
-      <div className="rounded-lg border bg-card p-4 space-y-2">
+      <div className={cn(
+        'rounded-xl border p-4 space-y-2.5 transition-colors',
+        completeness >= 80
+          ? 'border-emerald-200 bg-emerald-50/50 dark:border-emerald-900/50 dark:bg-emerald-950/20'
+          : completeness >= 50
+            ? 'border-amber-200 bg-amber-50/50 dark:border-amber-900/50 dark:bg-amber-950/20'
+            : 'border-border bg-card'
+      )}>
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium text-foreground">
             {tProfile('completeness')}
           </span>
           <span className={cn(
-            'text-sm font-semibold',
-            completeness >= 80 ? 'text-emerald-600' : completeness >= 50 ? 'text-amber-600' : 'text-muted-foreground'
+            'text-sm font-bold tabular-nums',
+            completeness >= 80 ? 'text-emerald-600 dark:text-emerald-400' : completeness >= 50 ? 'text-amber-600 dark:text-amber-400' : 'text-muted-foreground'
           )}>
             {completeness}%
           </span>
@@ -367,6 +404,199 @@ export function ProfileForm({ profile }: ProfileFormProps) {
               );
             })}
           </div>
+        </div>
+      </section>
+
+      {/* Section: Experience & Education */}
+      <section className="space-y-5">
+        <h2 className="text-base font-semibold text-foreground">{t('workExperience')}</h2>
+        <Separator />
+
+        {/* Work Experience */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <Label className="flex items-center gap-2">
+              <Briefcase className="h-3.5 w-3.5" />
+              {t('workExperience')}
+            </Label>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() =>
+                setExperience((prev) => [
+                  ...prev,
+                  { company: '', role: '', duration: '', current: false },
+                ])
+              }
+            >
+              <Plus className="h-3.5 w-3.5" />
+              {t('addExperience')}
+            </Button>
+          </div>
+
+          {experience.map((exp, index) => (
+            <div key={index} className="space-y-3 rounded-lg border border-border p-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-medium text-muted-foreground">
+                  Experience {index + 1}
+                </span>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="h-6 w-6"
+                  onClick={() =>
+                    setExperience((prev) => prev.filter((_, i) => i !== index))
+                  }
+                >
+                  <X className="h-3.5 w-3.5" />
+                </Button>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <Input
+                  placeholder={t('company')}
+                  value={exp.company}
+                  onChange={(e) => {
+                    const updated = [...experience];
+                    updated[index] = { ...updated[index], company: e.target.value };
+                    setExperience(updated);
+                  }}
+                />
+                <Input
+                  placeholder={t('role')}
+                  value={exp.role}
+                  onChange={(e) => {
+                    const updated = [...experience];
+                    updated[index] = { ...updated[index], role: e.target.value };
+                    setExperience(updated);
+                  }}
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <Input
+                  placeholder={t('duration')}
+                  value={exp.duration}
+                  onChange={(e) => {
+                    const updated = [...experience];
+                    updated[index] = { ...updated[index], duration: e.target.value };
+                    setExperience(updated);
+                  }}
+                  className="flex-1"
+                />
+                <label className="flex items-center gap-1.5 text-xs text-muted-foreground whitespace-nowrap">
+                  <input
+                    type="checkbox"
+                    checked={exp.current}
+                    onChange={(e) => {
+                      const updated = [...experience];
+                      updated[index] = { ...updated[index], current: e.target.checked };
+                      setExperience(updated);
+                    }}
+                    className="rounded border-input"
+                  />
+                  {t('current')}
+                </label>
+              </div>
+            </div>
+          ))}
+
+          {experience.length === 0 && (
+            <p className="text-center text-xs text-muted-foreground py-2">
+              No work experience added yet.
+            </p>
+          )}
+        </div>
+
+        {/* Education */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <Label className="flex items-center gap-2">
+              <GraduationCap className="h-3.5 w-3.5" />
+              {t('education')}
+            </Label>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() =>
+                setEducation((prev) => [
+                  ...prev,
+                  { school: '', degree: '', field: '', graduationYear: '' },
+                ])
+              }
+            >
+              <Plus className="h-3.5 w-3.5" />
+              {t('addEducation')}
+            </Button>
+          </div>
+
+          {education.map((edu, index) => (
+            <div key={index} className="space-y-3 rounded-lg border border-border p-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-medium text-muted-foreground">
+                  Education {index + 1}
+                </span>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="h-6 w-6"
+                  onClick={() =>
+                    setEducation((prev) => prev.filter((_, i) => i !== index))
+                  }
+                >
+                  <X className="h-3.5 w-3.5" />
+                </Button>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <Input
+                  placeholder={t('school')}
+                  value={edu.school}
+                  onChange={(e) => {
+                    const updated = [...education];
+                    updated[index] = { ...updated[index], school: e.target.value };
+                    setEducation(updated);
+                  }}
+                />
+                <Input
+                  placeholder={t('degree')}
+                  value={edu.degree}
+                  onChange={(e) => {
+                    const updated = [...education];
+                    updated[index] = { ...updated[index], degree: e.target.value };
+                    setEducation(updated);
+                  }}
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <Input
+                  placeholder={t('field')}
+                  value={edu.field}
+                  onChange={(e) => {
+                    const updated = [...education];
+                    updated[index] = { ...updated[index], field: e.target.value };
+                    setEducation(updated);
+                  }}
+                />
+                <Input
+                  placeholder={t('graduationYear')}
+                  value={edu.graduationYear}
+                  onChange={(e) => {
+                    const updated = [...education];
+                    updated[index] = { ...updated[index], graduationYear: e.target.value };
+                    setEducation(updated);
+                  }}
+                />
+              </div>
+            </div>
+          ))}
+
+          {education.length === 0 && (
+            <p className="text-center text-xs text-muted-foreground py-2">
+              No education added yet.
+            </p>
+          )}
         </div>
       </section>
 
