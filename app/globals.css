@@ -79,13 +79,6 @@
   }
 }
 
-/* Focus ring polish */
-@layer base {
-  *:focus-visible {
-    @apply outline-none ring-2 ring-ring/40 ring-offset-2 ring-offset-background;
-  }
-}
-
 /* Scrollbar styling */
 @layer utilities {
   .scrollbar-thin {

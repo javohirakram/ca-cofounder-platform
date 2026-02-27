@@ -29,8 +29,11 @@ import type { Profile, Json } from '@/types/database';
 interface WorkExperience {
   company: string;
   role: string;
-  duration: string;
+  startDate: string;  // "YYYY-MM"
+  endDate: string;    // "YYYY-MM" or ""
   current: boolean;
+  /** legacy field kept for backward compat when reading old DB data */
+  duration?: string;
 }
 
 interface EducationEntry {
@@ -359,7 +362,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
 
         {/* Bio */}
         <div className="space-y-1.5">
-          <Label htmlFor="bio">{t('step2Title')}</Label>
+          <Label htmlFor="bio">Bio</Label>
           <Textarea
             id="bio"
             rows={4}
@@ -426,7 +429,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
               onClick={() =>
                 setExperience((prev) => [
                   ...prev,
-                  { company: '', role: '', duration: '', current: false },
+                  { company: '', role: '', startDate: '', endDate: '', current: false },
                 ])
               }
             >
@@ -473,31 +476,56 @@ export function ProfileForm({ profile }: ProfileFormProps) {
                   }}
                 />
               </div>
-              <div className="flex items-center gap-2">
-                <Input
-                  placeholder={t('duration')}
-                  value={exp.duration}
-                  onChange={(e) => {
-                    const updated = [...experience];
-                    updated[index] = { ...updated[index], duration: e.target.value };
-                    setExperience(updated);
-                  }}
-                  className="flex-1"
-                />
-                <label className="flex items-center gap-1.5 text-xs text-muted-foreground whitespace-nowrap">
+              {/* Date range */}
+              <div className="grid grid-cols-2 gap-2">
+                <div className="space-y-1">
+                  <Label className="text-[11px] text-muted-foreground">Start</Label>
                   <input
-                    type="checkbox"
-                    checked={exp.current}
+                    type="month"
+                    value={exp.startDate ?? ''}
                     onChange={(e) => {
                       const updated = [...experience];
-                      updated[index] = { ...updated[index], current: e.target.checked };
+                      updated[index] = { ...updated[index], startDate: e.target.value };
                       setExperience(updated);
                     }}
-                    className="rounded border-input"
+                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                   />
-                  {t('current')}
-                </label>
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-[11px] text-muted-foreground">
+                    {exp.current ? 'End' : 'End'}
+                  </Label>
+                  <input
+                    type="month"
+                    value={exp.current ? '' : (exp.endDate ?? '')}
+                    disabled={exp.current}
+                    placeholder={exp.current ? 'Present' : ''}
+                    onChange={(e) => {
+                      const updated = [...experience];
+                      updated[index] = { ...updated[index], endDate: e.target.value };
+                      setExperience(updated);
+                    }}
+                    className={cn(
+                      'flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
+                      exp.current && 'opacity-40'
+                    )}
+                  />
+                </div>
               </div>
+              {/* Current checkbox */}
+              <label className="flex items-center gap-2 text-xs text-muted-foreground cursor-pointer w-fit">
+                <input
+                  type="checkbox"
+                  checked={exp.current}
+                  onChange={(e) => {
+                    const updated = [...experience];
+                    updated[index] = { ...updated[index], current: e.target.checked, endDate: e.target.checked ? '' : (updated[index].endDate ?? '') };
+                    setExperience(updated);
+                  }}
+                  className="rounded border-input h-3.5 w-3.5"
+                />
+                {t('current')} — still working here
+              </label>
             </div>
           ))}
 

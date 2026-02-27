@@ -88,7 +88,13 @@ interface OnboardingData {
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
-const COUNTRIES = ['Kazakhstan', 'Kyrgyzstan', 'Uzbekistan', 'Tajikistan', 'Turkmenistan'];
+const COUNTRIES = [
+  { value: 'KZ', label: 'Kazakhstan' },
+  { value: 'KG', label: 'Kyrgyzstan' },
+  { value: 'UZ', label: 'Uzbekistan' },
+  { value: 'TJ', label: 'Tajikistan' },
+  { value: 'TM', label: 'Turkmenistan' },
+];
 
 const ROLES = ['technical', 'business', 'design', 'product', 'operations'];
 
@@ -481,8 +487,8 @@ export default function OnboardingPage() {
                 </SelectTrigger>
                 <SelectContent>
                   {COUNTRIES.map((country) => (
-                    <SelectItem key={country} value={country}>
-                      {country}
+                    <SelectItem key={country.value} value={country.value}>
+                      {country.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -817,20 +823,29 @@ export default function OnboardingPage() {
               </div>
             </div>
 
-            {/* Describe Your Idea (conditional) */}
-            {data.ideaStage && data.ideaStage !== 'no_idea' && (
-              <div className="space-y-2">
-                <Label htmlFor="ideaDescription">{t('describeIdea')}</Label>
-                <Textarea
-                  id="ideaDescription"
-                  value={data.ideaDescription}
-                  onChange={(e) => updateData('ideaDescription', e.target.value)}
-                  placeholder="Briefly describe your startup idea..."
-                  rows={3}
-                  disabled={isLoading}
-                />
-              </div>
-            )}
+            {/* Bio — always visible; this saves to the profile bio column */}
+            <div className="space-y-2">
+              <Label htmlFor="ideaDescription">
+                {data.ideaStage && data.ideaStage !== 'no_idea'
+                  ? 'About You & Your Idea'
+                  : 'About You'}
+              </Label>
+              <p className="text-xs text-muted-foreground -mt-1">
+                This appears as your bio on your public profile.
+              </p>
+              <Textarea
+                id="ideaDescription"
+                value={data.ideaDescription}
+                onChange={(e) => updateData('ideaDescription', e.target.value)}
+                placeholder={
+                  data.ideaStage && data.ideaStage !== 'no_idea'
+                    ? 'Tell us about yourself and briefly describe your startup idea...'
+                    : 'Tell us about yourself, your background, and what you\'re looking to build...'
+                }
+                rows={3}
+                disabled={isLoading}
+              />
+            </div>
           </div>
         )}
 

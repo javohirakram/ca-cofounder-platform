@@ -30,7 +30,9 @@ import type { Profile, Idea, Connection, Json } from '@/types/database';
 interface ExperienceEntry {
   company: string;
   role: string;
-  duration: string;
+  duration?: string;     // legacy
+  startDate?: string;    // "YYYY-MM"
+  endDate?: string;      // "YYYY-MM"
   current?: boolean;
 }
 
@@ -212,13 +214,12 @@ export default async function ProfilePage({
             <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
               {(typedProfile.country || typedProfile.city) && (
                 <div className="flex items-center gap-1.5">
-                  {typedProfile.country ? (
-                    <span className="text-base">
-                      {getCountryFlag(typedProfile.country)}
-                    </span>
-                  ) : (
-                    <MapPin className="h-3.5 w-3.5" />
-                  )}
+                  {(() => {
+                    const flag = typedProfile.country ? getCountryFlag(typedProfile.country) : '';
+                    return flag
+                      ? <span className="text-base">{flag}</span>
+                      : <MapPin className="h-3.5 w-3.5" />;
+                  })()}
                   <span>
                     {[typedProfile.city, typedProfile.country]
                       .filter(Boolean)
@@ -604,8 +605,10 @@ export default async function ProfilePage({
                         {exp.company}
                       </p>
                       <p className="text-xs text-muted-foreground/70 mt-0.5">
-                        {exp.duration}
-                        {exp.current && (
+                        {exp.startDate
+                          ? `${exp.startDate.replace('-', '/')} → ${exp.current ? 'Present' : (exp.endDate?.replace('-', '/') ?? '…')}`
+                          : exp.duration}
+                        {exp.current && !exp.startDate && (
                           <span className="ml-2 text-emerald-600 font-medium">
                             Current
                           </span>

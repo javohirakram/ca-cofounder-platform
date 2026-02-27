@@ -13,8 +13,19 @@ const countryFlags: Record<string, string> = {
   TM: "\u{1F1F9}\u{1F1F2}",
 }
 
+// Map full country names to ISO codes (for backward compat with old DB data)
+const countryNameToCode: Record<string, string> = {
+  KAZAKHSTAN: 'KZ',
+  KYRGYZSTAN: 'KG',
+  UZBEKISTAN: 'UZ',
+  TAJIKISTAN: 'TJ',
+  TURKMENISTAN: 'TM',
+}
+
 export function getCountryFlag(country: string): string {
-  return countryFlags[country.toUpperCase()] ?? country
+  const upper = country.toUpperCase()
+  const code = countryNameToCode[upper] ?? upper
+  return countryFlags[code] ?? ''
 }
 
 export function getInitials(name: string): string {
