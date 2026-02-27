@@ -53,7 +53,19 @@
     "noAccount": "Нет аккаунта?",
     "hasAccount": "Уже есть аккаунт?",
     "loginButton": "Войти",
-    "registerButton": "Зарегистрироваться"
+    "registerButton": "Зарегистрироваться",
+    "fullName": "Полное имя",
+    "fullNamePlaceholder": "Иван Иванов",
+    "acceptTermsPre": "Я принимаю",
+    "termsOfService": "Условия использования",
+    "and": "и",
+    "privacyPolicy": "Политику конфиденциальности",
+    "forgotTitle": "Сброс пароля",
+    "forgotSubtitle": "Введите email и мы отправим вам ссылку для сброса",
+    "sendResetLink": "Отправить ссылку",
+    "sending": "Отправка...",
+    "resetSent": "Проверьте почту — мы отправили ссылку для сброса пароля",
+    "backToLogin": "Назад к входу"
   },
   "onboarding": {
     "title": "Заполните свой профиль",

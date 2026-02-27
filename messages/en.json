@@ -53,7 +53,19 @@
     "noAccount": "Don't have an account?",
     "hasAccount": "Already have an account?",
     "loginButton": "Sign In",
-    "registerButton": "Sign Up"
+    "registerButton": "Sign Up",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "John Doe",
+    "acceptTermsPre": "I agree to the",
+    "termsOfService": "Terms of Service",
+    "and": "and",
+    "privacyPolicy": "Privacy Policy",
+    "forgotTitle": "Reset Password",
+    "forgotSubtitle": "Enter your email and we'll send you a reset link",
+    "sendResetLink": "Send Reset Link",
+    "sending": "Sending...",
+    "resetSent": "Check your email for a password reset link",
+    "backToLogin": "Back to Sign In"
   },
   "onboarding": {
     "title": "Complete Your Profile",

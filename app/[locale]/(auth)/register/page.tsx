@@ -117,11 +117,11 @@ export default function RegisterPage() {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Name */}
         <div className="space-y-2">
-          <Label htmlFor="name">Name</Label>
+          <Label htmlFor="name">{t('fullName')}</Label>
           <Input
             id="name"
             type="text"
-            placeholder="John Doe"
+            placeholder={t('fullNamePlaceholder')}
             autoComplete="name"
             disabled={isLoading}
             {...register('name')}
@@ -193,19 +193,19 @@ export default function RegisterPage() {
             htmlFor="acceptTerms"
             className="text-xs leading-relaxed text-muted-foreground cursor-pointer"
           >
-            I agree to the{' '}
+            {t('acceptTermsPre')}{' '}
             <Link
               href={`/${locale}/terms`}
               className="font-medium text-primary underline-offset-4 hover:underline"
             >
-              Terms of Service
+              {t('termsOfService')}
             </Link>{' '}
-            and{' '}
+            {t('and')}{' '}
             <Link
               href={`/${locale}/privacy`}
               className="font-medium text-primary underline-offset-4 hover:underline"
             >
-              Privacy Policy
+              {t('privacyPolicy')}
             </Link>
           </label>
         </div>

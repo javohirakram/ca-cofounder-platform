@@ -53,7 +53,19 @@
     "noAccount": "Hisobingiz yo'qmi?",
     "hasAccount": "Hisobingiz bormi?",
     "loginButton": "Kirish",
-    "registerButton": "Ro'yxatdan o'tish"
+    "registerButton": "Ro'yxatdan o'tish",
+    "fullName": "To'liq ism",
+    "fullNamePlaceholder": "Jasur Karimov",
+    "acceptTermsPre": "Qabul qilaman",
+    "termsOfService": "Foydalanish shartlari",
+    "and": "va",
+    "privacyPolicy": "Maxfiylik siyosati",
+    "forgotTitle": "Parolni tiklash",
+    "forgotSubtitle": "Elektron pochtangizni kiriting, biz tiklash havolasini yuboramiz",
+    "sendResetLink": "Havola yuborish",
+    "sending": "Yuborilmoqda...",
+    "resetSent": "Elektron pochtangizni tekshiring — tiklash havolasi yuborildi",
+    "backToLogin": "Kirishga qaytish"
   },
   "onboarding": {
     "title": "Profilingizni to'ldiring",

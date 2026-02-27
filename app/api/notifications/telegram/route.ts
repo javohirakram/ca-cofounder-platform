@@ -20,6 +20,12 @@ interface NotificationBody {
 }
 
 export async function POST(request: NextRequest) {
+  // Only allow calls from our own server-side code via internal secret
+  const secret = request.headers.get('x-internal-secret')
+  if (!secret || secret !== process.env.INTERNAL_API_SECRET) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   try {
     const body: NotificationBody = await request.json()
     const { userId, type, fromName, threadId, ideaId, ideaTitle } = body
