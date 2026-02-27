@@ -50,7 +50,8 @@ export async function GET(request: NextRequest) {
     .map((m) => m.id);
 
   if (unreadIds.length > 0) {
-    await admin.from('messages').update({ is_read: true }).in('id', unreadIds);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (admin.from('messages') as any).update({ is_read: true }).in('id', unreadIds);
   }
 
   return NextResponse.json({ messages: messages ?? [] });
@@ -87,8 +88,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
-  const { data: message, error } = await admin
-    .from('messages')
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: message, error } = await (admin.from('messages') as any)
     .insert({
       thread_id: threadId,
       sender_id: session.user.id,
@@ -103,8 +104,8 @@ export async function POST(request: NextRequest) {
   }
 
   // Update thread last_message_at
-  await admin
-    .from('threads')
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  await (admin.from('threads') as any)
     .update({ last_message_at: new Date().toISOString() })
     .eq('id', threadId);
 

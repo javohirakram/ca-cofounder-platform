@@ -42,8 +42,8 @@ export async function POST(request: NextRequest) {
       }
       resolvedRequesterId = conn.requester_id;
 
-      const { error: connError } = await admin
-        .from('connections')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error: connError } = await (admin.from('connections') as any)
         .update({ status: 'accepted' })
         .eq('id', connectionId);
 
@@ -51,8 +51,8 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: connError.message }, { status: 500 });
       }
     } else {
-      const { error: connError } = await admin
-        .from('connections')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error: connError } = await (admin.from('connections') as any)
         .update({ status: 'accepted' })
         .eq('requester_id', requesterId)
         .eq('recipient_id', currentUserId)
@@ -105,8 +105,8 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: error.message }, { status: 500 });
       }
     } else {
-      const { error } = await admin
-        .from('connections')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error } = await (admin.from('connections') as any)
         .update({ status: 'declined' })
         .eq('requester_id', requesterId)
         .eq('recipient_id', currentUserId)
