@@ -94,7 +94,7 @@ export function DiscoverContent({
   // ── Browse: fetch profiles ─────────────────────────────────────────────────
   const fetchProfiles = useCallback(
     async (searchQuery: string, currentFilters: DiscoverFilters, pageNum: number, append: boolean) => {
-      append ? setLoadingMore(true) : setLoadingBrowse(true);
+      if (append) { setLoadingMore(true); } else { setLoadingBrowse(true); }
       try {
         const supabase = createClient();
         let query = supabase
@@ -124,7 +124,7 @@ export function DiscoverContent({
         if (error) { console.error('Browse fetch error:', error); return; }
 
         const fetched = (data as Profile[]) ?? [];
-        append ? setProfiles((prev) => [...prev, ...fetched]) : setProfiles(fetched);
+        if (append) { setProfiles((prev) => [...prev, ...fetched]); } else { setProfiles(fetched); }
         setTotal(count ?? 0);
       } catch (err) {
         console.error('Unexpected error:', err);
