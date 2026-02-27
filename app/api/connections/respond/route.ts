@@ -28,12 +28,14 @@ export async function POST(request: NextRequest) {
 
     if (connectionId) {
       // Fetch the connection to verify recipient and get requester
-      const { data: conn } = await admin
+      const { data: connRow } = await admin
         .from('connections')
         .select('requester_id, recipient_id')
         .eq('id', connectionId)
         .eq('recipient_id', currentUserId)
         .maybeSingle();
+
+      const conn = connRow as { requester_id: string; recipient_id: string } | null;
 
       if (!conn) {
         return NextResponse.json({ error: 'Connection not found' }, { status: 404 });
