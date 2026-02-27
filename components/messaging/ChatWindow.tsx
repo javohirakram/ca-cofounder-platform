@@ -40,7 +40,18 @@ export function ChatWindow({
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, []);
 
-  // Fetch messages
+  // Fetch messages via API (bypasses RLS)
+  const fetchMessages = useCallback(async () => {
+    if (!threadId) return;
+    const res = await fetch(`/api/messages?threadId=${threadId}`);
+    if (res.ok) {
+      const { messages: fetched } = await res.json();
+      setMessages((fetched as Message[]) ?? []);
+    } else {
+      console.error('Error fetching messages:', await res.text());
+    }
+  }, [threadId]);
+
   useEffect(() => {
     if (!threadId) {
       setMessages([]);
@@ -49,61 +60,27 @@ export function ChatWindow({
 
     let isCancelled = false;
 
-    async function fetchMessages() {
+    async function initialFetch() {
       setLoading(true);
-      const supabase = createClient();
-
-      const { data, error } = await supabase
-        .from('messages')
-        .select('*')
-        .eq('thread_id', threadId!)
-        .order('created_at', { ascending: true });
-
-      if (!isCancelled) {
-        if (error) {
-          console.error('Error fetching messages:', error);
-        } else {
-          setMessages((data as Message[]) ?? []);
-        }
-        setLoading(false);
-      }
+      await fetchMessages();
+      if (!isCancelled) setLoading(false);
     }
 
-    fetchMessages();
+    initialFetch();
 
     return () => {
       isCancelled = true;
     };
-  }, [threadId]);
+  }, [threadId, fetchMessages]);
 
-  // Mark messages as read
-  useEffect(() => {
-    if (!threadId || !currentUserId || messages.length === 0) return;
-
-    const unreadIds = messages
-      .filter((m) => m.sender_id !== currentUserId && !m.is_read)
-      .map((m) => m.id);
-
-    if (unreadIds.length === 0) return;
-
-    const supabase = createClient();
-    supabase
-      .from('messages')
-      .update({ is_read: true } as never)
-      .in('id', unreadIds)
-      .then(({ error }) => {
-        if (error) {
-          console.error('Error marking messages as read:', error);
-        }
-      });
-  }, [messages, threadId, currentUserId]);
+  // Mark-as-read is handled server-side in the GET /api/messages route
 
   // Scroll to bottom on new messages
   useEffect(() => {
     scrollToBottom();
   }, [messages, scrollToBottom]);
 
-  // Realtime subscription
+  // Realtime subscription — refetch via API when new messages arrive
   useEffect(() => {
     if (!threadId) return;
 
@@ -119,37 +96,9 @@ export function ChatWindow({
           table: 'messages',
           filter: `thread_id=eq.${threadId}`,
         },
-        (payload) => {
-          const newMsg = payload.new as Message;
-          setMessages((prev) => {
-            // Avoid duplicates
-            if (prev.some((m) => m.id === newMsg.id)) return prev;
-            return [...prev, newMsg];
-          });
-
-          // Mark as read if from other user
-          if (newMsg.sender_id !== currentUserId) {
-            supabase
-              .from('messages')
-              .update({ is_read: true } as never)
-              .eq('id', newMsg.id)
-              .then(() => {});
-          }
-        }
-      )
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'messages',
-          filter: `thread_id=eq.${threadId}`,
-        },
-        (payload) => {
-          const updated = payload.new as Message;
-          setMessages((prev) =>
-            prev.map((m) => (m.id === updated.id ? updated : m))
-          );
+        () => {
+          // Refetch from API to get full message list (handles RLS on realtime)
+          fetchMessages();
         }
       )
       .subscribe();
@@ -157,7 +106,7 @@ export function ChatWindow({
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [threadId, currentUserId]);
+  }, [threadId, fetchMessages]);
 
   async function handleSend() {
     if (!threadId || !newMessage.trim() || sending) return;
@@ -167,24 +116,23 @@ export function ChatWindow({
     setNewMessage('');
 
     try {
-      const supabase = createClient();
+      const res = await fetch('/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ threadId, content }),
+      });
 
-      const { error: msgError } = await supabase
-        .from('messages')
-        .insert({
-          thread_id: threadId,
-          sender_id: currentUserId,
-          content,
-          is_read: false,
-        } as never);
+      if (!res.ok) {
+        const { error } = await res.json();
+        throw new Error(error ?? 'Failed to send message');
+      }
 
-      if (msgError) throw msgError;
-
-      // Update thread's last_message_at
-      await supabase
-        .from('threads')
-        .update({ last_message_at: new Date().toISOString() } as never)
-        .eq('id', threadId);
+      const { message } = await res.json();
+      // Add the sent message immediately (realtime may also fire, dedup handled)
+      setMessages((prev) => {
+        if (prev.some((m) => m.id === (message as Message).id)) return prev;
+        return [...prev, message as Message];
+      });
     } catch (err) {
       console.error('Send message error:', err);
       setNewMessage(content);

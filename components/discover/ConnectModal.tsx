@@ -32,9 +32,10 @@ interface ConnectModalProps {
   profile: Profile | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onSuccess?: (profileId: string) => void;
 }
 
-export function ConnectModal({ profile, open, onOpenChange }: ConnectModalProps) {
+export function ConnectModal({ profile, open, onOpenChange, onSuccess }: ConnectModalProps) {
   const t = useTranslations('discover');
   const tCommon = useTranslations('common');
   const [message, setMessage] = useState('');
@@ -132,6 +133,7 @@ export function ConnectModal({ profile, open, onOpenChange }: ConnectModalProps)
       await supabase.from('notifications').insert(notificationData as never);
 
       setSent(true);
+      onSuccess?.(profile.id);
       toast.success('Connection request sent!');
 
       // Auto-close after brief success display

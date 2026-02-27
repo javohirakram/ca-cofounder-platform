@@ -3,6 +3,7 @@
     "home": "Home",
     "discover": "Discover",
     "matches": "Matches",
+    "connections": "Connections",
     "ideas": "Ideas",
     "messages": "Messages",
     "notifications": "Notifications",
@@ -124,7 +125,17 @@
     "loadMore": "Load More",
     "allCountries": "All Countries",
     "anyCommitment": "Any Commitment",
-    "anyStage": "Any Stage"
+    "anyStage": "Any Stage",
+    "pending": "Pending",
+    "connected": "Connected",
+    "forYouTab": "For You",
+    "browseTab": "Browse",
+    "whyThisMatch": "Why this match",
+    "lookingFor": "Looking for",
+    "noTopMatches": "No matches yet",
+    "noTopMatchesDesc": "Complete your profile to get personalized match recommendations",
+    "showingMatches": "Showing {count} matches",
+    "refreshMatches": "Refresh"
   },
   "matches": {
     "title": "Your Matches",
@@ -275,6 +286,23 @@
     "accountDeleted": "Account deleted",
     "settingsSaved": "Settings saved",
     "deleteTypeMismatch": "Please type DELETE to confirm"
+  },
+  "connections": {
+    "title": "My Connections",
+    "pendingRequests": "Pending Requests",
+    "myConnections": "My Connections",
+    "noConnections": "No connections yet",
+    "noConnectionsDesc": "Connect with founders to grow your network",
+    "noPendingRequests": "No pending requests",
+    "noPendingRequestsDesc": "When someone sends you a connection request, it will appear here",
+    "accept": "Accept",
+    "decline": "Decline",
+    "accepting": "Accepting...",
+    "declining": "Declining...",
+    "pending": "Pending",
+    "connected": "Connected",
+    "sentOn": "Sent {time}",
+    "message": "Message"
   },
   "admin": {
     "title": "Admin Dashboard",

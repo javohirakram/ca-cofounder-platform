@@ -3,6 +3,7 @@
     "home": "Bosh sahifa",
     "discover": "Qidirish",
     "matches": "Moslik",
+    "connections": "Aloqalar",
     "ideas": "G'oyalar",
     "messages": "Xabarlar",
     "notifications": "Bildirishnomalar",
@@ -124,7 +125,17 @@
     "loadMore": "Ko'proq yuklash",
     "allCountries": "Barcha davlatlar",
     "anyCommitment": "Har qanday jalb",
-    "anyStage": "Har qanday bosqich"
+    "anyStage": "Har qanday bosqich",
+    "pending": "Kutilmoqda",
+    "connected": "Ulangan",
+    "forYouTab": "Siz uchun",
+    "browseTab": "Ko'rish",
+    "whyThisMatch": "Nima uchun mos",
+    "lookingFor": "Qidiryapti",
+    "noTopMatches": "Hali mosliklar yo'q",
+    "noTopMatchesDesc": "Shaxsiy tavsiyalar olish uchun profilingizni to'ldiring",
+    "showingMatches": "{count} ta moslik ko'rsatilmoqda",
+    "refreshMatches": "Yangilash"
   },
   "matches": {
     "title": "Sizning mosliklaringiz",
@@ -275,6 +286,23 @@
     "accountDeleted": "Hisob o'chirildi",
     "settingsSaved": "Sozlamalar saqlandi",
     "deleteTypeMismatch": "Tasdiqlash uchun DELETE yozing"
+  },
+  "connections": {
+    "title": "Mening aloqalarim",
+    "pendingRequests": "Kutilayotgan so'rovlar",
+    "myConnections": "Mening aloqalarim",
+    "noConnections": "Hali aloqalar yo'q",
+    "noConnectionsDesc": "Tarmoqingizni kengaytirish uchun founders bilan bog'laning",
+    "noPendingRequests": "Kutilayotgan so'rovlar yo'q",
+    "noPendingRequestsDesc": "Kimdir sizga aloqa so'rovi yuborganda, u bu yerda ko'rinadi",
+    "accept": "Qabul qilish",
+    "decline": "Rad etish",
+    "accepting": "Qabul qilinmoqda...",
+    "declining": "Rad etilmoqda...",
+    "pending": "Kutilmoqda",
+    "connected": "Ulangan",
+    "sentOn": "{time} da yuborildi",
+    "message": "Xabar"
   },
   "admin": {
     "title": "Admin paneli",

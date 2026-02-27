@@ -12,6 +12,7 @@ import {
   Bell,
   Settings,
   User,
+  UserCheck,
 } from 'lucide-react';
 import { Logo } from '@/components/ui/logo';
 import {
@@ -30,6 +31,7 @@ interface SidebarItem {
 const mainNavItems: SidebarItem[] = [
   { labelKey: 'discover', href: '/discover', icon: Compass },
   { labelKey: 'matches', href: '/matches', icon: Users },
+  { labelKey: 'connections', href: '/connections', icon: UserCheck },
   { labelKey: 'ideas', href: '/ideas', icon: Lightbulb },
   { labelKey: 'messages', href: '/messages', icon: MessageSquare },
 ];

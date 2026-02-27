@@ -15,26 +15,29 @@ interface FounderGridProps {
   hasMore: boolean;
   loading?: boolean;
   currentUserId?: string | null;
+  connectionStatuses?: Record<string, 'pending' | 'connected'>;
+  onConnected?: (profileId: string) => void;
 }
 
-export function FounderGrid({ profiles, total, onLoadMore, hasMore, loading, currentUserId }: FounderGridProps) {
+export function FounderGrid({ profiles, total, onLoadMore, hasMore, loading, currentUserId, connectionStatuses = {}, onConnected }: FounderGridProps) {
   const t = useTranslations('discover');
   const [connectProfile, setConnectProfile] = useState<Profile | null>(null);
 
   return (
     <div className="space-y-6">
       {/* Results count */}
-      <p className="text-sm text-muted-foreground">
+      <p className="text-sm text-muted-foreground tabular-nums">
         {t('showingResults', { count: total })}
       </p>
 
       {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
         {profiles.map((profile) => (
           <ProfileCard
             key={profile.id}
             profile={profile}
             isOwnProfile={currentUserId === profile.id}
+            connectionStatus={connectionStatuses[profile.id] ?? 'none'}
             onConnect={(p) => setConnectProfile(p)}
           />
         ))}
@@ -67,6 +70,10 @@ export function FounderGrid({ profiles, total, onLoadMore, hasMore, loading, cur
         open={connectProfile !== null}
         onOpenChange={(open) => {
           if (!open) setConnectProfile(null);
+        }}
+        onSuccess={(profileId) => {
+          onConnected?.(profileId);
+          setConnectProfile(null);
         }}
       />
     </div>

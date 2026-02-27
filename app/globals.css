@@ -106,3 +106,25 @@
     @apply shadow-md -translate-y-0.5;
   }
 }
+
+/* ── Focus ring — consistent, accessible ─────────────────────────────────── */
+@layer base {
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+}
+
+/* ── Score badge colors (used in DiscoverMatchCard) ─────────────────────── */
+@layer utilities {
+  .score-strong  { @apply bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400; }
+  .score-good    { @apply bg-amber-50 text-amber-700 dark:bg-amber-950/50 dark:text-amber-400; }
+  .score-neutral { @apply bg-muted text-muted-foreground; }
+}
+
+/* ── Why-this-match block ─────────────────────────────────────────────────── */
+@layer utilities {
+  .match-reason-block {
+    @apply rounded-lg bg-primary/5 border border-primary/10 px-3 py-2.5;
+  }
+}

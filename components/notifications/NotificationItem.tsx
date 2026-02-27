@@ -76,58 +76,22 @@ export function NotificationItem({ notification, onMarkAsRead }: NotificationIte
     setAccepting(true);
 
     try {
-      const supabase = createClient();
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.user) return;
+      const res = await fetch('/api/connections/respond', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ requesterId, action: 'accept' }),
+      });
 
-      const currentUserId = session.user.id;
-
-      // Update connection status to accepted
-      const { error: connError } = await (supabase
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from('connections') as any)
-        .update({ status: 'accepted' })
-        .eq('requester_id', requesterId)
-        .eq('recipient_id', currentUserId)
-        .eq('status', 'pending');
-
-      if (connError) throw connError;
-
-      // Create a message thread
-      const { error: threadError } = await supabase
-        .from('threads')
-        .insert({
-          participant_a: currentUserId,
-          participant_b: requesterId,
-        } as never);
-
-      if (threadError && !threadError.message.includes('duplicate')) {
-        console.error('Thread creation error:', threadError);
+      if (!res.ok) {
+        const { error } = await res.json();
+        throw new Error(error ?? 'Failed to accept');
       }
 
-      // Get current user's name for notification
-      const { data: myProfile } = await supabase
-        .from('profiles')
-        .select('full_name')
-        .eq('id', currentUserId)
-        .single();
-
-      const myName = (myProfile as { full_name: string | null } | null)?.full_name ?? 'Someone';
-
-      // Notify the requester
-      await supabase.from('notifications').insert({
-        user_id: requesterId,
-        type: 'connection_accepted',
-        title: `${myName} accepted your connection request`,
-        body: 'You can now message each other.',
-        link: `/profile/${currentUserId}`,
-      } as never);
-
       // Mark this notification as read
-      await (supabase
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from('notifications') as any)
-        .update({ is_read: true })
+      const supabase = createClient();
+      await supabase
+        .from('notifications')
+        .update({ is_read: true } as never)
         .eq('id', notification.id);
 
       onMarkAsRead(notification.id);
@@ -147,26 +111,22 @@ export function NotificationItem({ notification, onMarkAsRead }: NotificationIte
     setDeclining(true);
 
     try {
-      const supabase = createClient();
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.user) return;
+      const res = await fetch('/api/connections/respond', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ requesterId, action: 'decline' }),
+      });
 
-      // Update connection status to declined
-      const { error } = await (supabase
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from('connections') as any)
-        .update({ status: 'declined' })
-        .eq('requester_id', requesterId)
-        .eq('recipient_id', session.user.id)
-        .eq('status', 'pending');
-
-      if (error) throw error;
+      if (!res.ok) {
+        const { error } = await res.json();
+        throw new Error(error ?? 'Failed to decline');
+      }
 
       // Mark notification as read
-      await (supabase
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from('notifications') as any)
-        .update({ is_read: true })
+      const supabase = createClient();
+      await supabase
+        .from('notifications')
+        .update({ is_read: true } as never)
         .eq('id', notification.id);
 
       onMarkAsRead(notification.id);

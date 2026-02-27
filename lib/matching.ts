@@ -113,3 +113,87 @@ function calculateLanguageScore(a: Profile, b: Profile): number {
   if (shared === 1) return 5
   return 0
 }
+
+// ─── Match Reasons ────────────────────────────────────────────────────────────
+// Generates 2–3 short, human-readable bullets explaining why two profiles match.
+
+function cap(s: string): string {
+  return s.charAt(0).toUpperCase() + s.slice(1)
+}
+
+const STRONG_COMPLEMENTS = new Set([
+  'technical-business', 'business-technical',
+  'technical-product', 'product-technical',
+])
+const GOOD_COMPLEMENTS = new Set([
+  'technical-design', 'design-technical',
+  'business-design', 'design-business',
+  'business-operations', 'operations-business',
+  'product-design', 'design-product',
+])
+
+const COMMITMENT_LABELS: Record<string, string> = {
+  full_time: 'Both fully committed — great alignment',
+  part_time: 'Both available 20+ hrs/week',
+  exploring: 'Both in exploration mode',
+}
+
+export function generateMatchReasons(a: Profile, b: Profile): string[] {
+  const reasons: string[] = []
+
+  // 1. Role complementarity
+  const rolesA = a.role || []
+  const rolesB = b.role || []
+  const primaryA = rolesA[0]
+  const primaryB = rolesB[0]
+
+  if (primaryA && primaryB) {
+    const pair = `${primaryA}-${primaryB}`
+    if (STRONG_COMPLEMENTS.has(pair)) {
+      reasons.push(`${cap(primaryA)} + ${cap(primaryB)} — ideal co-founder pairing`)
+    } else if (GOOD_COMPLEMENTS.has(pair)) {
+      reasons.push(`${cap(primaryA)} + ${cap(primaryB)} — strong complement`)
+    } else if (primaryA !== primaryB) {
+      reasons.push(`Complementary roles: ${cap(primaryA)} + ${cap(primaryB)}`)
+    }
+  }
+
+  // 2. Commitment alignment
+  if (a.commitment && b.commitment && a.commitment === b.commitment) {
+    const label = COMMITMENT_LABELS[a.commitment]
+    if (label) reasons.push(label)
+  } else if (a.commitment === 'full_time' && b.commitment === 'full_time') {
+    reasons.push('Both fully committed full-time')
+  }
+
+  // 3. Shared industries
+  const indA = new Set(a.industries || [])
+  const indB = new Set(b.industries || [])
+  const sharedIndustries = Array.from(indA).filter(x => indB.has(x))
+  if (sharedIndustries.length >= 2) {
+    reasons.push(`Both focused on ${sharedIndustries.slice(0, 2).join(' & ')}`)
+  } else if (sharedIndustries.length === 1) {
+    reasons.push(`Shared focus: ${sharedIndustries[0]}`)
+  }
+
+  // 4. Location (fill slot 3 if needed)
+  if (reasons.length < 3) {
+    if (a.city && b.city && a.city === b.city) {
+      reasons.push(`Same city — ${a.city}`)
+    } else if (a.country && b.country && a.country === b.country) {
+      reasons.push(`Both based in ${a.country}`)
+    }
+  }
+
+  // 5. Languages (fill if still short)
+  if (reasons.length < 2) {
+    const langA = new Set(a.languages || [])
+    const langB = new Set(b.languages || [])
+    const sharedLangs = Array.from(langA).filter(x => langB.has(x))
+    if (sharedLangs.length > 0) {
+      reasons.push(`Speak ${sharedLangs.slice(0, 2).join(' & ')}`)
+    }
+  }
+
+  return reasons.slice(0, 3)
+}

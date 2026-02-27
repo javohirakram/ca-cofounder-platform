@@ -3,6 +3,7 @@
     "home": "Главная",
     "discover": "Поиск",
     "matches": "Совпадения",
+    "connections": "Связи",
     "ideas": "Идеи",
     "messages": "Сообщения",
     "notifications": "Уведомления",
@@ -124,7 +125,17 @@
     "loadMore": "Загрузить ещё",
     "allCountries": "Все страны",
     "anyCommitment": "Любая вовлечённость",
-    "anyStage": "Любая стадия"
+    "anyStage": "Любая стадия",
+    "pending": "Ожидает",
+    "connected": "Подключён",
+    "forYouTab": "Для вас",
+    "browseTab": "Обзор",
+    "whyThisMatch": "Почему это совпадение",
+    "lookingFor": "Ищет",
+    "noTopMatches": "Совпадений пока нет",
+    "noTopMatchesDesc": "Заполните профиль, чтобы получить персональные рекомендации",
+    "showingMatches": "Показано {count} совпадений",
+    "refreshMatches": "Обновить"
   },
   "matches": {
     "title": "Ваши совпадения",
@@ -275,6 +286,23 @@
     "accountDeleted": "Аккаунт удалён",
     "settingsSaved": "Настройки сохранены",
     "deleteTypeMismatch": "Пожалуйста, введите DELETE для подтверждения"
+  },
+  "connections": {
+    "title": "Мои связи",
+    "pendingRequests": "Ожидающие запросы",
+    "myConnections": "Мои связи",
+    "noConnections": "Пока нет связей",
+    "noConnectionsDesc": "Устанавливайте связи с фаундерами, чтобы расширить сеть",
+    "noPendingRequests": "Нет ожидающих запросов",
+    "noPendingRequestsDesc": "Когда кто-то отправит вам запрос на связь, он появится здесь",
+    "accept": "Принять",
+    "decline": "Отклонить",
+    "accepting": "Принятие...",
+    "declining": "Отклонение...",
+    "pending": "Ожидает",
+    "connected": "Подключён",
+    "sentOn": "Отправлено {time}",
+    "message": "Сообщение"
   },
   "admin": {
     "title": "Панель администратора",

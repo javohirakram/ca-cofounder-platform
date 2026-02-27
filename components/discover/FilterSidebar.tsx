@@ -35,6 +35,8 @@ export interface DiscoverFilters {
 interface FilterSidebarProps {
   filters: DiscoverFilters;
   onFilterChange: (filters: DiscoverFilters) => void;
+  /** When true, only renders the compact Sheet trigger (no desktop aside) */
+  compact?: boolean;
 }
 
 const COUNTRIES = [
@@ -343,16 +345,51 @@ function FilterContent({ filters, onFilterChange }: FilterSidebarProps) {
   );
 }
 
-export function FilterSidebar({ filters, onFilterChange }: FilterSidebarProps) {
+export function FilterSidebar({ filters, onFilterChange, compact = false }: FilterSidebarProps) {
   const t = useTranslations('common');
   const tDiscover = useTranslations('discover');
   const [open, setOpen] = useState(false);
   const activeCount = getActiveFilterCount(filters);
 
+  // Sheet trigger — used both in compact mode and as the mobile trigger
+  const sheetTriggerButton = (
+    <Button variant="outline" size="sm" className="gap-2 h-9 shrink-0">
+      <SlidersHorizontal className="h-4 w-4" />
+      {t('filter')}
+      {activeCount > 0 && (
+        <Badge variant="secondary" className="h-5 px-1.5 text-[10px] font-medium">
+          {activeCount}
+        </Badge>
+      )}
+    </Button>
+  );
+
+  const sheetPanel = (
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>{sheetTriggerButton}</SheetTrigger>
+      <SheetContent side="left" className="w-80 p-0">
+        <SheetHeader className="p-6 pb-0">
+          <SheetTitle>{tDiscover('filterBy')}</SheetTitle>
+          <SheetDescription className="sr-only">Filter founders by various criteria</SheetDescription>
+        </SheetHeader>
+        <ScrollArea className="h-[calc(100vh-5rem)]">
+          <div className="p-6 pt-4">
+            <FilterContent filters={filters} onFilterChange={onFilterChange} />
+          </div>
+        </ScrollArea>
+      </SheetContent>
+    </Sheet>
+  );
+
+  // Compact mode: just the sheet trigger button (for horizontal filter rows)
+  if (compact) {
+    return sheetPanel;
+  }
+
   return (
     <>
       {/* Desktop: inline sidebar */}
-      <aside className="hidden lg:block w-64 shrink-0">
+      <aside className="hidden lg:block w-56 shrink-0">
         <ScrollArea className="h-[calc(100vh-8rem)]">
           <div className="pr-4 pb-8">
             <FilterContent filters={filters} onFilterChange={onFilterChange} />
@@ -360,34 +397,9 @@ export function FilterSidebar({ filters, onFilterChange }: FilterSidebarProps) {
         </ScrollArea>
       </aside>
 
-      {/* Mobile: sheet */}
+      {/* Mobile/tablet: sheet trigger */}
       <div className="lg:hidden">
-        <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger asChild>
-            <Button variant="outline" size="sm" className="gap-2">
-              <SlidersHorizontal className="h-4 w-4" />
-              {t('filter')}
-              {activeCount > 0 && (
-                <Badge variant="secondary" className="h-5 px-1.5 text-[10px] font-medium ml-1">
-                  {activeCount}
-                </Badge>
-              )}
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="w-80 p-0">
-            <SheetHeader className="p-6 pb-0">
-              <SheetTitle>{tDiscover('filterBy')}</SheetTitle>
-              <SheetDescription className="sr-only">
-                Filter founders by various criteria
-              </SheetDescription>
-            </SheetHeader>
-            <ScrollArea className="h-[calc(100vh-5rem)]">
-              <div className="p-6 pt-4">
-                <FilterContent filters={filters} onFilterChange={onFilterChange} />
-              </div>
-            </ScrollArea>
-          </SheetContent>
-        </Sheet>
+        {sheetPanel}
       </div>
     </>
   );
