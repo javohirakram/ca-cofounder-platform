@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { createAdminClient } from '@/lib/supabase-admin';
@@ -20,10 +21,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const admin = createAdminClient();
+  const db = createAdminClient() as any;
 
   // Verify caller is a thread participant
-  const { data: thread } = await admin
+  const { data: thread } = await db
     .from('threads')
     .select('id')
     .eq('id', threadId)
@@ -34,7 +35,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
-  const { data: messages, error } = await admin
+  const { data: messages, error } = await db
     .from('messages')
     .select('*')
     .eq('thread_id', threadId)
@@ -45,13 +46,12 @@ export async function GET(request: NextRequest) {
   }
 
   // Mark unread messages from others as read
-  const unreadIds = (messages ?? [])
-    .filter((m) => m.sender_id !== session.user.id && !m.is_read)
-    .map((m) => m.id);
+  const unreadIds = ((messages as any[]) ?? [])
+    .filter((m: any) => m.sender_id !== session.user.id && !m.is_read)
+    .map((m: any) => m.id);
 
   if (unreadIds.length > 0) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await (admin.from('messages') as any).update({ is_read: true }).in('id', unreadIds);
+    await db.from('messages').update({ is_read: true }).in('id', unreadIds);
   }
 
   return NextResponse.json({ messages: messages ?? [] });
@@ -74,10 +74,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'threadId and content required' }, { status: 400 });
   }
 
-  const admin = createAdminClient();
+  const db = createAdminClient() as any;
 
   // Verify caller is a thread participant
-  const { data: thread } = await admin
+  const { data: thread } = await db
     .from('threads')
     .select('id')
     .eq('id', threadId)
@@ -88,8 +88,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: message, error } = await (admin.from('messages') as any)
+  const { data: message, error } = await db
+    .from('messages')
     .insert({
       thread_id: threadId,
       sender_id: session.user.id,
@@ -104,8 +104,8 @@ export async function POST(request: NextRequest) {
   }
 
   // Update thread last_message_at
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  await (admin.from('threads') as any)
+  await db
+    .from('threads')
     .update({ last_message_at: new Date().toISOString() })
     .eq('id', threadId);
 

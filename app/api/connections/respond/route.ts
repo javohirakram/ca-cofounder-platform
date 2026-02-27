@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { createAdminClient } from '@/lib/supabase-admin';
@@ -21,29 +22,27 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
   }
 
-  const admin = createAdminClient();
+  const db = createAdminClient() as any;
 
   if (action === 'accept') {
     let resolvedRequesterId = requesterId;
 
     if (connectionId) {
       // Fetch the connection to verify recipient and get requester
-      const { data: connRow } = await admin
+      const { data: connRow } = await db
         .from('connections')
         .select('requester_id, recipient_id')
         .eq('id', connectionId)
         .eq('recipient_id', currentUserId)
         .maybeSingle();
 
-      const conn = connRow as { requester_id: string; recipient_id: string } | null;
-
-      if (!conn) {
+      if (!connRow) {
         return NextResponse.json({ error: 'Connection not found' }, { status: 404 });
       }
-      resolvedRequesterId = conn.requester_id;
+      resolvedRequesterId = (connRow as { requester_id: string }).requester_id;
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error: connError } = await (admin.from('connections') as any)
+      const { error: connError } = await db
+        .from('connections')
         .update({ status: 'accepted' })
         .eq('id', connectionId);
 
@@ -51,8 +50,8 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: connError.message }, { status: 500 });
       }
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error: connError } = await (admin.from('connections') as any)
+      const { error: connError } = await db
+        .from('connections')
         .update({ status: 'accepted' })
         .eq('requester_id', requesterId)
         .eq('recipient_id', currentUserId)
@@ -64,7 +63,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create a message thread (ignore duplicate)
-    const { error: threadError } = await admin.from('threads').insert({
+    const { error: threadError } = await db.from('threads').insert({
       participant_a: currentUserId,
       participant_b: resolvedRequesterId,
     });
@@ -74,7 +73,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get current user's name for the notification
-    const { data: myProfile } = await admin
+    const { data: myProfile } = await db
       .from('profiles')
       .select('full_name')
       .eq('id', currentUserId)
@@ -83,19 +82,19 @@ export async function POST(request: NextRequest) {
     const myName = (myProfile as { full_name: string | null } | null)?.full_name ?? 'Someone';
 
     // Notify the requester
-    await admin.from('notifications').insert({
+    await db.from('notifications').insert({
       user_id: resolvedRequesterId,
       type: 'connection_accepted',
       title: `${myName} accepted your connection request`,
       body: 'You can now message each other.',
       link: `/profile/${currentUserId}`,
-    } as never);
+    });
 
     return NextResponse.json({ success: true });
   } else {
     // Decline
     if (connectionId) {
-      const { error } = await admin
+      const { error } = await db
         .from('connections')
         .delete()
         .eq('id', connectionId)
@@ -105,8 +104,8 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: error.message }, { status: 500 });
       }
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error } = await (admin.from('connections') as any)
+      const { error } = await db
+        .from('connections')
         .update({ status: 'declined' })
         .eq('requester_id', requesterId)
         .eq('recipient_id', currentUserId)
