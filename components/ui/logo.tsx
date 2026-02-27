@@ -6,76 +6,37 @@ interface LogoProps {
   className?: string;
 }
 
-// CA brand colors
-const BLUE = '#1A4F9A';
-const GREEN = '#2E8B57';
-
 export function Logo({ size = 'md', showText = true, className }: LogoProps) {
-  const sizeMap = {
-    sm: { letterClass: 'text-[20px]', labelClass: 'text-sm', arrow: 6 },
-    md: { letterClass: 'text-[24px]', labelClass: 'text-sm', arrow: 7 },
-    lg: { letterClass: 'text-[30px]', labelClass: 'text-lg', arrow: 9 },
+  const markClass = {
+    sm: 'h-7 w-7 rounded-lg text-[11px]',
+    md: 'h-8 w-8 rounded-[10px] text-[13px]',
+    lg: 'h-10 w-10 rounded-xl text-[15px]',
   };
 
-  const { letterClass, labelClass, arrow } = sizeMap[size];
+  const labelClass = {
+    sm: 'text-sm',
+    md: 'text-sm',
+    lg: 'text-base',
+  };
 
   return (
-    <div className={cn('flex items-center gap-2', className)}>
-      {/* ── CA logo mark ── */}
-      <div className="relative flex items-baseline">
-        {/* Blue C */}
-        <span
-          className={cn('font-black tracking-tighter leading-none select-none', letterClass)}
-          style={{ color: BLUE }}
-        >
-          C
-        </span>
-        {/* Green A */}
-        <span
-          className={cn('font-black tracking-tighter leading-none select-none', letterClass)}
-          style={{ color: GREEN }}
-        >
-          A
-        </span>
-
-        {/* Upward arrow decoration */}
-        <svg
-          aria-hidden="true"
-          className="absolute"
-          style={{ top: `-${arrow}px`, right: `-${arrow * 0.3}px` }}
-          width={arrow}
-          height={arrow + 2}
-          viewBox="0 0 8 10"
-          fill="none"
-        >
-          <path
-            d="M4 9V2M4 2L1 5M4 2L7 5"
-            stroke={GREEN}
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-
-        {/* Sparkle dot */}
-        <span
-          aria-hidden="true"
-          className="absolute rounded-full"
-          style={{
-            width: `${Math.round(arrow * 0.42)}px`,
-            height: `${Math.round(arrow * 0.42)}px`,
-            background: GREEN,
-            top: `-${Math.round(arrow * 1.35)}px`,
-            right: `-${Math.round(arrow * 1.1)}px`,
-          }}
-        />
+    <div className={cn('flex items-center gap-2.5', className)}>
+      {/* Icon mark — gradient square with CA */}
+      <div
+        className={cn(
+          'flex shrink-0 items-center justify-center font-black tracking-tight text-white shadow-sm select-none',
+          markClass[size]
+        )}
+        style={{ background: 'linear-gradient(135deg, #1A4F9A 0%, #1A7A50 100%)' }}
+      >
+        CA
       </div>
 
-      {/* ── Wordmark ── */}
+      {/* Wordmark */}
       {showText && (
-        <div className={cn('font-semibold tracking-tight leading-none', labelClass)}>
+        <div className={cn('font-semibold tracking-tight leading-none', labelClass[size])}>
           <span className="text-foreground">CoFound</span>
-          <span style={{ color: GREEN }}>&nbsp;CA</span>
+          <span className="text-primary"> CA</span>
         </div>
       )}
     </div>
