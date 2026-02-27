@@ -11,28 +11,30 @@
 @layer base {
   :root {
     --background: 0 0% 98.5%;
-    --foreground: 224 10% 10%;
+    --foreground: 220 15% 10%;
     --card: 0 0% 100%;
-    --card-foreground: 224 10% 10%;
+    --card-foreground: 220 15% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 224 10% 10%;
-    --primary: 221 83% 53%;
+    --popover-foreground: 220 15% 10%;
+    /* CA brand blue: #1A4F9A */
+    --primary: 214 71% 36%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 224 10% 10%;
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 46%;
-    --accent: 220 14% 96%;
-    --accent-foreground: 224 10% 10%;
+    --secondary: 214 20% 95%;
+    --secondary-foreground: 220 15% 10%;
+    --muted: 214 20% 95%;
+    --muted-foreground: 214 10% 46%;
+    --accent: 214 20% 95%;
+    --accent-foreground: 220 15% 10%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
-    --success: 142 71% 45%;
+    /* CA brand green: #2E8B57 */
+    --success: 146 50% 36%;
     --success-foreground: 0 0% 100%;
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 221 83% 53%;
-    --chart-1: 221 83% 53%;
-    --chart-2: 142 71% 45%;
+    --border: 214 15% 90%;
+    --input: 214 15% 90%;
+    --ring: 214 71% 36%;
+    --chart-1: 214 71% 36%;
+    --chart-2: 146 50% 36%;
     --chart-3: 47 96% 53%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
@@ -40,29 +42,31 @@
   }
 
   .dark {
-    --background: 224 10% 4%;
+    --background: 220 15% 4%;
     --foreground: 210 20% 95%;
-    --card: 224 10% 7%;
+    --card: 220 15% 7%;
     --card-foreground: 210 20% 95%;
-    --popover: 224 10% 7%;
+    --popover: 220 15% 7%;
     --popover-foreground: 210 20% 95%;
-    --primary: 217 91% 60%;
+    /* CA brand blue lightened for dark mode */
+    --primary: 214 71% 58%;
     --primary-foreground: 0 0% 100%;
     --secondary: 215 14% 12%;
     --secondary-foreground: 210 20% 95%;
     --muted: 215 14% 12%;
-    --muted-foreground: 217 10% 56%;
+    --muted-foreground: 215 10% 56%;
     --accent: 215 14% 14%;
     --accent-foreground: 210 20% 95%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
-    --success: 142 71% 45%;
+    /* CA brand green lightened for dark mode */
+    --success: 146 50% 48%;
     --success-foreground: 0 0% 100%;
     --border: 215 14% 16%;
     --input: 215 14% 16%;
-    --ring: 217 91% 60%;
-    --chart-1: 217 91% 60%;
-    --chart-2: 142 71% 45%;
+    --ring: 214 71% 58%;
+    --chart-1: 214 71% 58%;
+    --chart-2: 146 50% 48%;
     --chart-3: 47 96% 53%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;

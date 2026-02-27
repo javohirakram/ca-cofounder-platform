@@ -6,58 +6,76 @@ interface LogoProps {
   className?: string;
 }
 
+// CA brand colors
+const BLUE = '#1A4F9A';
+const GREEN = '#2E8B57';
+
 export function Logo({ size = 'md', showText = true, className }: LogoProps) {
-  const sizes = {
-    sm: 'h-7 w-7',
-    md: 'h-8 w-8',
-    lg: 'h-10 w-10',
+  const sizeMap = {
+    sm: { letterClass: 'text-[20px]', labelClass: 'text-sm', arrow: 6 },
+    md: { letterClass: 'text-[24px]', labelClass: 'text-sm', arrow: 7 },
+    lg: { letterClass: 'text-[30px]', labelClass: 'text-lg', arrow: 9 },
   };
 
-  const textSizes = {
-    sm: 'text-sm',
-    md: 'text-sm',
-    lg: 'text-lg',
-  };
+  const { letterClass, labelClass, arrow } = sizeMap[size];
 
   return (
     <div className={cn('flex items-center gap-2', className)}>
-      <div
-        className={cn(
-          'relative flex items-center justify-center rounded-xl bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground shadow-sm',
-          sizes[size]
-        )}
-      >
-        <svg
-          viewBox="0 0 32 32"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-[60%] w-[60%]"
+      {/* ── CA logo mark ── */}
+      <div className="relative flex items-baseline">
+        {/* Blue C */}
+        <span
+          className={cn('font-black tracking-tighter leading-none select-none', letterClass)}
+          style={{ color: BLUE }}
         >
-          {/* Two interlocking circles representing co-founders connecting */}
-          <circle
-            cx="11"
-            cy="16"
-            r="8"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            fill="none"
-            opacity="0.9"
-          />
-          <circle
-            cx="21"
-            cy="16"
-            r="8"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            fill="none"
-            opacity="0.9"
+          C
+        </span>
+        {/* Green A */}
+        <span
+          className={cn('font-black tracking-tighter leading-none select-none', letterClass)}
+          style={{ color: GREEN }}
+        >
+          A
+        </span>
+
+        {/* Upward arrow decoration */}
+        <svg
+          aria-hidden="true"
+          className="absolute"
+          style={{ top: `-${arrow}px`, right: `-${arrow * 0.3}px` }}
+          width={arrow}
+          height={arrow + 2}
+          viewBox="0 0 8 10"
+          fill="none"
+        >
+          <path
+            d="M4 9V2M4 2L1 5M4 2L7 5"
+            stroke={GREEN}
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
+
+        {/* Sparkle dot */}
+        <span
+          aria-hidden="true"
+          className="absolute rounded-full"
+          style={{
+            width: `${Math.round(arrow * 0.42)}px`,
+            height: `${Math.round(arrow * 0.42)}px`,
+            background: GREEN,
+            top: `-${Math.round(arrow * 1.35)}px`,
+            right: `-${Math.round(arrow * 1.1)}px`,
+          }}
+        />
       </div>
+
+      {/* ── Wordmark ── */}
       {showText && (
-        <div className={cn('font-semibold tracking-tight leading-none', textSizes[size])}>
+        <div className={cn('font-semibold tracking-tight leading-none', labelClass)}>
           <span className="text-foreground">CoFound</span>
-          <span className="text-primary/70"> CA</span>
+          <span style={{ color: GREEN }}>&nbsp;CA</span>
         </div>
       )}
     </div>
