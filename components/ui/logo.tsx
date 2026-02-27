@@ -8,15 +8,15 @@ interface LogoProps {
 
 export function Logo({ size = 'md', showText = true, className }: LogoProps) {
   const markClass = {
-    sm: 'h-7 w-7 rounded-lg text-[11px]',
-    md: 'h-8 w-8 rounded-[10px] text-[13px]',
-    lg: 'h-10 w-10 rounded-xl text-[15px]',
+    sm: 'h-7 w-7 rounded-lg text-[15px]',
+    md: 'h-9 w-9 rounded-[10px] text-[17px]',
+    lg: 'h-11 w-11 rounded-xl text-[21px]',
   };
 
   const labelClass = {
     sm: 'text-sm',
-    md: 'text-sm',
-    lg: 'text-base',
+    md: 'text-[15px]',
+    lg: 'text-lg',
   };
 
   return (
