@@ -1,7 +1,9 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { Logo } from '@/components/ui/logo';
+import { LanguageToggle } from '@/components/ui/language-toggle';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -28,6 +30,8 @@ export default async function LandingPage({ params: { locale } }: PageProps) {
     redirect(`/${locale}/discover`);
   }
 
+  const t = await getTranslations({ locale, namespace: 'landing' });
+
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
 
@@ -35,12 +39,13 @@ export default async function LandingPage({ params: { locale } }: PageProps) {
       <header className="sticky top-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-md">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 flex h-14 items-center justify-between">
           <Logo size="md" showText />
-          <nav className="flex items-center gap-2">
+          <nav className="flex items-center gap-3">
+            <LanguageToggle currentLocale={locale} />
             <Button variant="ghost" size="sm" asChild>
-              <Link href={`/${locale}/login`}>Sign In</Link>
+              <Link href={`/${locale}/login`}>{t('signIn')}</Link>
             </Button>
             <Button size="sm" asChild>
-              <Link href={`/${locale}/register`}>Get Started</Link>
+              <Link href={`/${locale}/register`}>{t('getStarted')}</Link>
             </Button>
           </nav>
         </div>
@@ -50,7 +55,6 @@ export default async function LandingPage({ params: { locale } }: PageProps) {
 
         {/* ── Hero ── */}
         <section className="relative overflow-hidden">
-          {/* Background glow */}
           <div className="pointer-events-none absolute inset-0 -z-10">
             <div className="absolute left-1/2 top-0 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-primary/5 blur-3xl" />
           </div>
@@ -58,36 +62,34 @@ export default async function LandingPage({ params: { locale } }: PageProps) {
           <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-20 pb-24 text-center">
             <Badge variant="secondary" className="mb-6 gap-1.5 px-3 py-1 text-xs font-medium rounded-full border border-primary/20 bg-primary/5 text-primary">
               <Sparkles className="h-3 w-3" />
-              Central Asia&apos;s Co-Founder Network
+              {t('badge')}
             </Badge>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight mb-6">
-              Find Your{' '}
-              <span className="text-primary">Co-Founder</span>
+              {t('heroLine1')}{' '}
+              <span className="text-primary">{t('heroHighlight')}</span>
               <br />
-              in Central Asia
+              {t('heroLine2')}
             </h1>
 
             <p className="mx-auto max-w-2xl text-base sm:text-lg text-muted-foreground leading-relaxed mb-10">
-              Connect with driven entrepreneurs across Kazakhstan, Kyrgyzstan,
-              Uzbekistan, Tajikistan, and Turkmenistan. Share ideas, get
-              matched by skills, and build the future together.
+              {t('heroSubtitle')}
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Button size="lg" className="w-full sm:w-auto gap-2 h-11 px-7 text-base" asChild>
                 <Link href={`/${locale}/register`}>
-                  Join for Free
+                  {t('joinFree')}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
               <Button size="lg" variant="outline" className="w-full sm:w-auto h-11 px-7 text-base" asChild>
-                <Link href={`/${locale}/login`}>Sign In</Link>
+                <Link href={`/${locale}/login`}>{t('signIn')}</Link>
               </Button>
             </div>
 
             <p className="mt-4 text-xs text-muted-foreground/60">
-              Free to join · No credit card required
+              {t('freeNote')}
             </p>
           </div>
         </section>
@@ -97,10 +99,10 @@ export default async function LandingPage({ params: { locale } }: PageProps) {
           <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
               {[
-                { value: '500+', label: 'Founders' },
-                { value: '5', label: 'Countries' },
-                { value: '300+', label: 'Connections Made' },
-                { value: '150+', label: 'Ideas Shared' },
+                { value: '500+', label: t('statFounders') },
+                { value: '5',    label: t('statCountries') },
+                { value: '300+', label: t('statConnections') },
+                { value: '150+', label: t('statIdeas') },
               ].map((stat) => (
                 <div key={stat.label} className="space-y-1">
                   <p className="text-3xl font-bold text-foreground tabular-nums">{stat.value}</p>
@@ -115,10 +117,10 @@ export default async function LandingPage({ params: { locale } }: PageProps) {
         <section className="mx-auto max-w-6xl px-4 sm:px-6 py-20">
           <div className="text-center mb-14">
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mb-3">
-              Everything you need to find your co-founder
+              {t('featuresTitle')}
             </h2>
             <p className="text-muted-foreground max-w-xl mx-auto">
-              Built specifically for the Central Asian startup ecosystem.
+              {t('featuresSubtitle')}
             </p>
           </div>
 
@@ -127,20 +129,20 @@ export default async function LandingPage({ params: { locale } }: PageProps) {
               {
                 icon: Sparkles,
                 color: 'text-violet-500 bg-violet-500/10',
-                title: 'Smart Matching',
-                desc: 'Our algorithm scores compatibility across roles, industries, commitment level, and location — so you connect with founders who actually complement you.',
+                title: t('featureMatchingTitle'),
+                desc:  t('featureMatchingDesc'),
               },
               {
                 icon: Lightbulb,
                 color: 'text-amber-500 bg-amber-500/10',
-                title: 'Startup Ideas',
-                desc: 'Post your startup ideas, browse what others are building, and find collaborators who share your vision before you even start coding.',
+                title: t('featureIdeasTitle'),
+                desc:  t('featureIdeasDesc'),
               },
               {
                 icon: MapPin,
                 color: 'text-emerald-500 bg-emerald-500/10',
-                title: 'Region-Focused',
-                desc: 'Filter by country, language, and ecosystem. Whether you\'re in Almaty, Tashkent, or Bishkek — find the right people in your market.',
+                title: t('featureRegionTitle'),
+                desc:  t('featureRegionDesc'),
               },
             ].map(({ icon: Icon, color, title, desc }) => (
               <div
@@ -162,36 +164,20 @@ export default async function LandingPage({ params: { locale } }: PageProps) {
           <div className="mx-auto max-w-6xl px-4 sm:px-6 py-20">
             <div className="text-center mb-14">
               <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mb-3">
-                Up and running in minutes
+                {t('hiwTitle')}
               </h2>
               <p className="text-muted-foreground">
-                Three simple steps to find your perfect co-founder.
+                {t('hiwSubtitle')}
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-              {/* Connector line (desktop only) */}
               <div className="hidden md:block absolute top-8 left-[calc(16.67%+1rem)] right-[calc(16.67%+1rem)] h-px bg-border/60" />
 
               {[
-                {
-                  step: '01',
-                  icon: Users,
-                  title: 'Create your profile',
-                  desc: 'Tell us about your skills, background, industries you care about, and what kind of co-founder you\'re looking for.',
-                },
-                {
-                  step: '02',
-                  icon: Sparkles,
-                  title: 'Get matched',
-                  desc: 'We surface your top matches daily — scored by role complementarity, shared interests, and commitment level.',
-                },
-                {
-                  step: '03',
-                  icon: Zap,
-                  title: 'Connect & build',
-                  desc: 'Send a connection request with a personal note. Once accepted, start a conversation and start building together.',
-                },
+                { step: '01', icon: Users,    title: t('hiwStep1Title'), desc: t('hiwStep1Desc') },
+                { step: '02', icon: Sparkles, title: t('hiwStep2Title'), desc: t('hiwStep2Desc') },
+                { step: '03', icon: Zap,      title: t('hiwStep3Title'), desc: t('hiwStep3Desc') },
               ].map(({ step, icon: Icon, title, desc }) => (
                 <div key={step} className="relative flex flex-col items-center text-center gap-4">
                   <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full border-2 border-primary/20 bg-background shadow-sm">
@@ -213,7 +199,7 @@ export default async function LandingPage({ params: { locale } }: PageProps) {
         {/* ── Countries ── */}
         <section className="mx-auto max-w-6xl px-4 sm:px-6 py-16">
           <p className="text-center text-sm text-muted-foreground mb-8 font-medium uppercase tracking-wider">
-            Serving founders across
+            {t('serving')}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
             {[
@@ -242,23 +228,23 @@ export default async function LandingPage({ params: { locale } }: PageProps) {
             </div>
 
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mb-3">
-              Ready to find your co-founder?
+              {t('ctaTitle')}
             </h2>
             <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-              Join hundreds of founders already building in Central Asia. It&apos;s free.
+              {t('ctaSubtitle')}
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
               <Button size="lg" className="w-full sm:w-auto gap-2 h-11 px-8 text-base" asChild>
                 <Link href={`/${locale}/register`}>
-                  Create your profile
+                  {t('ctaButton')}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
-              {['Free to join', 'No credit card', '2 min setup'].map((item) => (
+              {[t('checkFree'), t('checkNoCC'), t('checkSetup')].map((item) => (
                 <span key={item} className="flex items-center gap-1.5">
                   <CheckCircle2 className="h-3 w-3 text-emerald-500" />
                   {item}
@@ -275,10 +261,10 @@ export default async function LandingPage({ params: { locale } }: PageProps) {
           <Logo size="sm" showText />
           <div className="flex items-center gap-6 text-xs text-muted-foreground">
             <Link href={`/${locale}/login`} className="hover:text-foreground transition-colors">
-              Sign In
+              {t('signIn')}
             </Link>
             <Link href={`/${locale}/register`} className="hover:text-foreground transition-colors">
-              Register
+              {t('getStarted')}
             </Link>
           </div>
           <p className="text-xs text-muted-foreground/60">
